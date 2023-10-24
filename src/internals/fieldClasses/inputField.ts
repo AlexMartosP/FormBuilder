@@ -1,45 +1,38 @@
-import { LucideIcon } from "lucide-react";
 import * as z from "zod";
-import {
-  AvailableFieldIds,
-  Element,
-  IField,
-  Option,
-  Props,
-  RuleSet,
-  Types,
-} from "./types";
-import presetFieldMeta from "./presets";
-
+import { IInputField, Primitivies, RuleSet } from "../types/fields";
+import { Element, Props } from "../types/helpers";
+import { AvailableFieldIds } from "../types/ids";
+import { Option } from "../types/options";
+import metaFieldsPreset from "../constants/metaFieldsPreset";
 type ConstructorInput = {
   name: string;
   id: AvailableFieldIds;
+  placeholder: string;
 } & Option;
 
-class Field implements IField {
+class InputField implements IInputField {
   label: string;
-  icon: LucideIcon;
   id: string;
   element: Element;
   rules: RuleSet;
   props: Props;
-  type: Types;
+  primitive: Primitivies;
   name: string;
   key: string;
+  placeholder: string;
 
-  constructor({ label, icon, id, name }: ConstructorInput) {
+  constructor({ label, id, name, placeholder }: ConstructorInput) {
     this.label = label;
-    this.icon = icon;
     this.id = id;
+    this.placeholder = placeholder;
+    this.name = name;
 
     this.key = crypto.randomUUID();
 
-    this.element = presetFieldMeta[id].element;
-    this.rules = presetFieldMeta[id].rules;
-    this.props = presetFieldMeta[id].props;
-    this.type = presetFieldMeta[id].type;
-
-    this.name = name;
+    this.element = metaFieldsPreset[id].element;
+    this.rules = metaFieldsPreset[id].rules;
+    this.props = metaFieldsPreset[id].props;
+    this.primitive = metaFieldsPreset[id].primitive;
   }
 
   getZodType(): z.ZodType {
@@ -58,7 +51,7 @@ class Field implements IField {
   }
 
   getDefaultValue(): unknown {
-    switch (this.type) {
+    switch (this.primitive) {
       case "string":
         return "";
       case "number":
@@ -69,4 +62,4 @@ class Field implements IField {
   }
 }
 
-export default Field;
+export default InputField;

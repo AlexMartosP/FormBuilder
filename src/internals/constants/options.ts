@@ -1,7 +1,7 @@
 import { Binary, Columns, Mail, PenBox, Phone } from "lucide-react";
-import { Option } from "./types";
+import { Option } from "../types/options";
 
-const items: Option[] = [
+const options: Option[] = [
   {
     label: "Text input",
     icon: PenBox,
@@ -29,4 +29,4 @@ const items: Option[] = [
   },
 ];
 
-export default items;
+export default options;

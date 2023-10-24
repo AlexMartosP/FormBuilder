@@ -1,12 +1,12 @@
 import { Input } from "@/components/ui/Input";
-import { PresetObject } from "./types";
+import { PresetObject } from "../types/helpers";
 
-const presetFieldMeta: PresetObject = {
+const metaFieldsPreset: PresetObject = {
   text_input: {
     props: {
       type: "text",
     },
-    type: "string",
+    primitive: "string",
     rules: {
       required: null,
       minLength: null,
@@ -18,7 +18,7 @@ const presetFieldMeta: PresetObject = {
     props: {
       type: "number",
     },
-    type: "number",
+    primitive: "number",
     rules: {
       required: null,
       minLength: null,
@@ -30,7 +30,7 @@ const presetFieldMeta: PresetObject = {
     props: {
       type: "email",
     },
-    type: "string",
+    primitive: "string",
     rules: {
       required: null,
       minLength: null,
@@ -42,7 +42,7 @@ const presetFieldMeta: PresetObject = {
     props: {
       type: "tel",
     },
-    type: "string",
+    primitive: "string",
     rules: {
       required: null,
       minLength: null,
@@ -52,4 +52,4 @@ const presetFieldMeta: PresetObject = {
   },
 };
 
-export default presetFieldMeta;
+export default metaFieldsPreset;

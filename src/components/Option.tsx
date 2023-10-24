@@ -1,6 +1,6 @@
 "use client";
 
-import { Option } from "@/engine/types";
+import { Option } from "@/internals/types/options";
 import { useDrag } from "react-dnd";
 
 export default function Option({ option }: { option: Option }) {

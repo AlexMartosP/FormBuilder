@@ -1,13 +1,13 @@
-import { IField } from "@/engine/types";
 import { FormControl, FormField, FormItem, FormLabel } from "./ui/Form";
 import { Control } from "react-hook-form";
 import { useDrag } from "react-dnd";
+import { IInputField } from "@/internals/types/fields";
 
 export default function PreviewField({
   engineField,
   control,
 }: {
-  engineField: IField;
+  engineField: IInputField;
   control: Control;
 }) {
   const [{ isDragging }, drag, dragPreview] = useDrag(() => ({

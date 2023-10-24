@@ -1,8 +1,8 @@
-import { IColumnField, IField } from "./types";
+import { IColumnField, SomeField } from "../types/fields";
 
 class ColumnField implements IColumnField {
   amount: number;
-  columns: IField[];
+  columns: Exclude<SomeField, IColumnField>[];
   id: string;
 
   constructor(amount: number) {
