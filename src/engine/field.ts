@@ -1,7 +1,20 @@
 import { LucideIcon } from "lucide-react";
 import * as z from "zod";
-import { Element, IField, Option, Props, RuleSet, Types } from "./types";
+import {
+  AvailableFieldIds,
+  Element,
+  IField,
+  Option,
+  Props,
+  RuleSet,
+  Types,
+} from "./types";
 import presetFieldMeta from "./presets";
+
+type ConstructorInput = {
+  name: string;
+  id: AvailableFieldIds;
+} & Option;
 
 class Field implements IField {
   label: string;
@@ -14,7 +27,7 @@ class Field implements IField {
   name: string;
   key: string;
 
-  constructor({ label, icon, id, name }: Option & { name: string }) {
+  constructor({ label, icon, id, name }: ConstructorInput) {
     this.label = label;
     this.icon = icon;
     this.id = id;

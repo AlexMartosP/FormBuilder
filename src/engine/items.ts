@@ -1,7 +1,5 @@
-import { PenBox, Binary, Mail, Phone, Columns } from "lucide-react";
-import { IField, Option } from "./types";
-import { Input } from "@/components/ui/Input";
-import Field from "./field";
+import { Binary, Columns, Mail, PenBox, Phone } from "lucide-react";
+import { Option } from "./types";
 
 const items: Option[] = [
   {

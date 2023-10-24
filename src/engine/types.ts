@@ -3,14 +3,13 @@ import { ForwardRefExoticComponent, ReactElement } from "react";
 import { ZodAny, ZodType } from "zod";
 
 // Ids
-type ids =
+export type AvailableFieldIds =
   | "text_input"
   | "number_input"
   | "email_input"
-  | "phone_input"
-  | "columns";
+  | "phone_input";
 
-type fieldIds = "text_input" | "number_input" | "email_input" | "phone_input";
+export type AvailableOptionIds = "columns" | AvailableFieldIds;
 
 // Unions
 export type Types = "string" | "number" | "email";
@@ -20,13 +19,13 @@ export type Element = JSX.ElementType | ForwardRefExoticComponent<any>;
 
 export type Props = Record<string, string>;
 
-export type PresetObject = Record<fieldIds, MetaField>;
+export type PresetObject = Record<AvailableFieldIds, MetaField>;
 
 // Option
 export type Option = {
   label: string;
   icon: LucideIcon;
-  id: ids;
+  id: AvailableOptionIds;
 };
 
 // Engine
@@ -61,18 +60,20 @@ export type Schema = Record<string, ZodType>;
 export type DefaultValues = Record<string, unknown>;
 
 export interface IEngine {
-  fields: IField[];
+  fields: (IField | IColumnField)[];
   schema: Schema;
   defaultValues: DefaultValues;
 }
 
 // Column
 export interface IColumnField {
+  id: string;
   amount: number;
   columns: IField[];
 }
 
 // Context
 export type AddFieldFn = (option: Option, name: string, label: string) => void;
+export type AddColumnFn = (option: Option, amount: number) => void;
 export type RemoveFieldFn = (field: IField) => void;
 export type UpdateFieldFn = (field: IField, updatedField: IField) => void;
