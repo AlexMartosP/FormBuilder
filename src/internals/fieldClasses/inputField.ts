@@ -1,18 +1,19 @@
 import * as z from "zod";
 import { IInputField, Primitivies, RuleSet } from "../types/fields";
 import { Element, Props } from "../types/helpers";
-import { AvailableFieldIds } from "../types/ids";
-import { Option } from "../types/options";
+import { AvailableFieldIds, AvailableOptionIds } from "../types/ids";
+import { TOption } from "../types/options";
 import metaFieldsPreset from "../constants/metaFieldsPreset";
+
 type ConstructorInput = {
   name: string;
   id: AvailableFieldIds;
   placeholder: string;
-} & Option;
+} & TOption;
 
 class InputField implements IInputField {
   label: string;
-  id: string;
+  id: AvailableOptionIds;
   element: Element;
   rules: RuleSet;
   props: Props;

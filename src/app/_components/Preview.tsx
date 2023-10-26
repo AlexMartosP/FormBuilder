@@ -2,13 +2,14 @@
 
 import Columns from "@/components/Columns";
 import EmptyColumn from "@/components/EmptyColumn";
-import PreviewField from "@/components/PreviewField";
-import { Form } from "@/components/ui/Form";
-import { useEngine } from "@/context/EngineProvider";
+import BottomDropZone from "@/components/dropzones/BottomDropZone";
+import SidesDropZone from "@/components/dropzones/SidesDropZone";
+import DraggableInputField from "@/components/inputField/DraggableInputField";
+import { Form, FormField, FormItem } from "@/components/ui/Form";
+import { useEngine } from "@/context/engine/EngineProvider";
 import ColumnField from "@/internals/fieldClasses/columnsField";
 import InputField from "@/internals/fieldClasses/inputField";
 import { SomeField } from "@/internals/types/fields";
-import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -30,28 +31,70 @@ export default function Preview() {
     console.log(e);
   }
 
-  function renderField(field: SomeField) {
-    if (field instanceof InputField) {
+  function renderField(fieldMeta: SomeField, columnKey?: string) {
+    if (fieldMeta instanceof InputField) {
       return (
-        <PreviewField
-          key={field.key}
-          engineField={field}
-          control={form.control}
-        />
-      );
-    } else if (field instanceof ColumnField) {
-      return (
-        <Columns key={field.id} amount={field.amount}>
-          {field.columns.length > 0 ? (
-            <>{field.columns.map((innerField) => renderField(innerField))}</>
+        <BottomDropZone
+          key={fieldMeta.key}
+          fieldKey={fieldMeta.key}
+          columnKey={columnKey}
+        >
+          {!columnKey ? (
+            <SidesDropZone fieldKey={fieldMeta.key} columnKey={columnKey}>
+              <FormField
+                control={form.control}
+                name={fieldMeta.name}
+                render={({ field }) => (
+                  <FormItem>
+                    <DraggableInputField
+                      engineField={fieldMeta}
+                      columnKey={columnKey}
+                      {...field}
+                    />
+                  </FormItem>
+                )}
+              ></FormField>
+            </SidesDropZone>
           ) : (
-            <>
-              {new Array(field.amount).fill(null).map((_, i) => (
-                <EmptyColumn key={i} />
-              ))}
-            </>
+            <FormField
+              control={form.control}
+              name={fieldMeta.name}
+              render={({ field }) => (
+                <FormItem>
+                  <DraggableInputField
+                    engineField={fieldMeta}
+                    columnKey={columnKey}
+                    {...field}
+                  />
+                </FormItem>
+              )}
+            ></FormField>
           )}
-        </Columns>
+        </BottomDropZone>
+      );
+    } else if (fieldMeta instanceof ColumnField) {
+      return (
+        <BottomDropZone key={fieldMeta.key} fieldKey={fieldMeta.key}>
+          <Columns amount={fieldMeta.amount}>
+            {fieldMeta.columns.map((column) => (
+              <div className="flex-1">
+                {column.length > 0 ? (
+                  <>
+                    {column.map((innerField) =>
+                      renderField(innerField, fieldMeta.key)
+                    )}
+                  </>
+                ) : (
+                  <>
+                    {new Array(1).fill(null).map((_, i) => (
+                      <EmptyColumn key={i} />
+                    ))}
+                  </>
+                )}
+              </div>
+            ))}
+          </Columns>
+        </BottomDropZone>
       );
     } else {
       return <></>;

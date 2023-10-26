@@ -1,5 +1,6 @@
 import { ZodType } from "zod";
 import { Element, Props } from "./helpers";
+import { AvailableOptionIds } from "./ids";
 
 // Base
 export type Rule<Value = unknown> = {
@@ -22,6 +23,7 @@ export type MetaField = {
 };
 
 type BaseField = {
+  id: AvailableOptionIds;
   label: string;
   key: string;
   name: string;
@@ -65,9 +67,17 @@ interface IFileField extends BaseField {
 
 // Column
 export interface IColumnField {
-  id: string;
+  id: AvailableOptionIds;
+  key: string;
   amount: number;
-  columns: Exclude<SomeField, IColumnField>[];
+  columns: SomeFieldExceptColumn[][];
+  addField(field: SomeFieldExceptColumn, column: number, index: number): void;
+  removeField(fieldKey: string, columnIndex?: number): void;
+  getFieldIndex(fieldKey: string): {
+    fieldIndex: number | null;
+    columnIndex: number | null;
+  };
+  getSingleFilledColumnFields(): SomeFieldExceptColumn[] | null;
 }
 
 // Fields union
@@ -78,6 +88,8 @@ export type SomeField =
   | IRadioField
   | IFileField
   | IColumnField;
+
+export type SomeFieldExceptColumn = Exclude<SomeField, IColumnField>;
 
 // Unions
 export type Primitivies = "string" | "number";
