@@ -1,6 +1,7 @@
 "use client";
 
 import { useEngine } from "@/context/engine/EngineProvider";
+import { useMetaSideBarContext } from "@/context/metaSidebar/MetaSidebarProvider";
 import { ItemAsField, ItemAsOption, ItemTypes } from "@/internals/types/DND";
 import { SomeField } from "@/internals/types/fields";
 import { TOption } from "@/internals/types/options";
@@ -17,6 +18,7 @@ export default function BottomDropZone({
   columnKey?: string;
 }) {
   const { addField, addColumn, moveField } = useEngine();
+  const { updateCurrentEditingField } = useMetaSideBarContext();
 
   const [{ isOver, canDrop }, drop] = useDrop({
     accept: [ItemTypes.Option, ItemTypes.Field],
@@ -45,6 +47,8 @@ export default function BottomDropZone({
               columnKey,
             });
         }
+
+        updateCurrentEditingField(fieldKey, columnKey);
       } else {
         const field = item as ItemAsField;
         moveField({

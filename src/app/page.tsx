@@ -1,28 +1,34 @@
 "use client";
 
-import Image from "next/image";
-import Options from "./_components/Options";
-import Preview from "./_components/Preview";
+import CustomDragLayer from "@/components/CustomDragLayer";
 import EngineProvider from "@/context/engine/EngineProvider";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import CustomDragLayer from "@/components/CustomDragLayer";
+import Meta from "./_components/Meta";
+import Options from "./_components/Options";
+import Preview from "./_components/Preview";
+import MetaSidebarProvider from "@/context/metaSidebar/MetaSidebarProvider";
 
 export default function Home() {
   return (
     <main>
       <EngineProvider>
-        <DndProvider backend={HTML5Backend}>
-          <CustomDragLayer />
-          <div className="flex min-h-screen">
-            <div className="p-4 w-1/4 border-r border-r-1">
-              <Options />
+        <MetaSidebarProvider>
+          <DndProvider backend={HTML5Backend}>
+            <CustomDragLayer />
+            <div className="flex min-h-screen">
+              <div className="p-4 w-1/4 border-r border-r-1">
+                <Options />
+              </div>
+              <div className="p-4 flex-1">
+                <Preview />
+              </div>
+              <div className="p-4 w-1/4 border-l border-l-1">
+                <Meta />
+              </div>
             </div>
-            <div className="p-4 flex-1">
-              <Preview />
-            </div>
-          </div>
-        </DndProvider>
+          </DndProvider>
+        </MetaSidebarProvider>
       </EngineProvider>
     </main>
   );

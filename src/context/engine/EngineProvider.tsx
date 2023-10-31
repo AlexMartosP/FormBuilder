@@ -6,8 +6,10 @@ import {
   AddFieldFn,
   AddFieldToSideFn,
   EngineContext,
+  GetFieldByKeys,
   MoveFieldFn,
   MoveFieldToSideFn,
+  UpdateFieldFn,
 } from "./EngineContext";
 import InputField from "@/internals/fieldClasses/inputField";
 import ColumnField from "@/internals/fieldClasses/columnsField";
@@ -405,6 +407,35 @@ export default function EngineProvider({ children }: PropsWithChildren) {
     setEngine(newEngine);
   };
 
+  const getFieldByKeys: GetFieldByKeys = (fieldKey, columnKey) => {
+    const indexes = getIndexes(engine.fields, fieldKey, columnKey);
+    const field = getFieldOfIndexes(engine.fields, indexes);
+
+    return field;
+  };
+
+  const updateField: UpdateFieldFn = (fieldKey, columnKey, updatedField) => {
+    const newEngine = { ...engine };
+
+    const indexes = getIndexes(engine.fields, fieldKey, columnKey);
+    const currentField = getFieldOfIndexes(engine.fields, indexes);
+
+    if (!indexes.isInColumn) {
+      newEngine.fields[indexes.topIndex] = updatedField;
+    } else {
+      (newEngine.fields[indexes.topIndex] as IColumnField).columns[
+        indexes.columnIndex
+      ][indexes.fieldIndex] = updatedField;
+    }
+
+    delete newEngine.schema[currentField.name];
+    delete newEngine.defaultValues[currentField.name];
+
+    newEngine.schema[updatedField.name] = updatedField.getZodType();
+    newEngine.defaultValues[updatedField.name] = updatedField.getDefaultValue();
+    setEngine(newEngine);
+  };
+
   return (
     <EngineContext.Provider
       value={{
@@ -414,6 +445,8 @@ export default function EngineProvider({ children }: PropsWithChildren) {
         moveField,
         addFieldToSide,
         moveFieldToSide,
+        getFieldByKeys,
+        updateField,
       }}
     >
       {children}
