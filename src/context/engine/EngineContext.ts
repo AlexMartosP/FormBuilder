@@ -1,4 +1,4 @@
-import { IEngine } from "@/internals/types/engine";
+import { IEngine, Indexes } from "@/internals/types/engine";
 import {
   IInputField,
   SomeField,
@@ -14,7 +14,6 @@ export const EngineContext = createContext<{
   addFieldToSide: AddFieldToSideFn;
   moveFieldToSide: MoveFieldToSideFn;
   engine: IEngine;
-  getFieldByKeys: GetFieldByKeys;
   updateField: UpdateFieldFn;
 } | null>(null);
 
@@ -22,21 +21,24 @@ export type AddFieldFn = (args: {
   option: TOption;
   name: string;
   label: string;
-  fieldKey: string;
-  columnKey?: string;
+  toIndexes: Indexes[string];
 }) => void;
 
-export type AddColumnFn = (args: { amount: number; fieldKey: string }) => void;
+export type AddColumnFn = (args: {
+  amount: number;
+  targetIndexes: Indexes[string];
+}) => void;
+
 export type MoveFieldFn = ({
-  fieldKey,
-  columnKey,
-  toFieldKey,
-  toColumnKey,
+  sourceFieldKey,
+  targetFieldKey,
+  sourceIndexes,
+  targetIndexes,
 }: {
-  fieldKey: string;
-  toFieldKey: string;
-  toColumnKey?: string;
-  columnKey?: string;
+  sourceFieldKey: string;
+  targetFieldKey: string;
+  sourceIndexes: Indexes[string];
+  targetIndexes: Indexes[string];
 }) => void;
 
 export type AddFieldToSideFn = (
@@ -55,7 +57,6 @@ export type GetFieldByKeys = (
 export type RemoveFieldFn = (field: IInputField) => void;
 
 export type UpdateFieldFn = (
-  field: string,
-  columnKey: string,
+  fieldKey: string,
   updatedField: SomeFieldExceptColumn
 ) => void;

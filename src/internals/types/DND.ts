@@ -1,3 +1,4 @@
+import { Indexes } from "./engine";
 import { TOption } from "./options";
 
 export enum ItemTypes {
@@ -14,5 +15,5 @@ export type ItemAsField = {
   };
   value: string;
   width: number;
-  columnKey?: string;
+  indexes: Indexes[string];
 };

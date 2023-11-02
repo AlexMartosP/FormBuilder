@@ -3,6 +3,7 @@
 import { useEngine } from "@/context/engine/EngineProvider";
 import { useMetaSideBarContext } from "@/context/metaSidebar/MetaSidebarProvider";
 import { ItemAsField, ItemAsOption, ItemTypes } from "@/internals/types/DND";
+import { Indexes } from "@/internals/types/engine";
 import { SomeField } from "@/internals/types/fields";
 import { TOption } from "@/internals/types/options";
 import { ReactNode } from "react";
@@ -11,11 +12,11 @@ import { useDrop } from "react-dnd";
 export default function BottomDropZone({
   children,
   fieldKey,
-  columnKey,
+  indexes,
 }: {
   children: ReactNode;
   fieldKey: string;
-  columnKey?: string;
+  indexes: Indexes[string];
 }) {
   const { addField, addColumn, moveField } = useEngine();
   const { updateCurrentEditingField } = useMetaSideBarContext();
@@ -32,7 +33,7 @@ export default function BottomDropZone({
           case "columns":
             addColumn({
               amount: 2,
-              fieldKey,
+              targetIndexes: indexes,
             });
             break;
           case "text_input":
@@ -43,19 +44,18 @@ export default function BottomDropZone({
               option,
               name: "t",
               label: "New label",
-              fieldKey,
-              columnKey,
+              toIndexes: indexes,
             });
         }
 
-        updateCurrentEditingField(fieldKey, columnKey);
+        updateCurrentEditingField(fieldKey);
       } else {
         const field = item as ItemAsField;
         moveField({
-          fieldKey: field.engineField.key,
-          columnKey: field.columnKey,
-          toFieldKey: fieldKey,
-          toColumnKey: columnKey,
+          sourceFieldKey: field.engineField.key,
+          targetFieldKey: fieldKey,
+          sourceIndexes: field.indexes,
+          targetIndexes: indexes,
         });
       }
     },
@@ -65,12 +65,12 @@ export default function BottomDropZone({
       if (itemType === ItemTypes.Option) {
         const option = item as ItemAsOption;
 
-        if (option.id === "columns" && columnKey) {
+        if (option.id === "columns" && indexes.columnIndex) {
           return false;
         }
       } else {
         const field = item as ItemAsField;
-        if (field.engineField.id === "columns" && columnKey) {
+        if (field.engineField.id === "columns" && indexes.columnIndex) {
           return false;
         }
 

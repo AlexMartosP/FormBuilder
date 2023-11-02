@@ -4,21 +4,22 @@ import { ReactNode } from "react";
 import { useDrop } from "react-dnd";
 import LeftDropZone from "./LeftDropZone";
 import RightDropZone from "./RightDropZone";
+import { Indexes } from "@/internals/types/engine";
 
 export default function SidesDropZone({
   children,
   fieldKey,
-  columnKey,
+  indexes,
 }: {
   children: ReactNode;
   fieldKey: string;
-  columnKey?: string;
+  indexes: Indexes[string];
 }) {
   return (
     <div className="flex relative">
-      <LeftDropZone fieldKey={fieldKey} columnKey={columnKey} />
+      <LeftDropZone fieldKey={fieldKey} indexes={indexes} />
       <div className="flex-1">{children}</div>
-      <RightDropZone fieldKey={fieldKey} columnKey={columnKey} />
+      <RightDropZone fieldKey={fieldKey} indexes={indexes} />
     </div>
   );
 }

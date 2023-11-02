@@ -1,18 +1,18 @@
 "use client";
 
+import { SomeFieldExceptColumn } from "@/internals/types/fields";
 import { PropsWithChildren, useContext, useState } from "react";
-import { MetaSideBarContext, TMetaSideBarContext } from "./MetaSidebarContext";
 import { useEngine } from "../engine/EngineProvider";
-import { SomeField, SomeFieldExceptColumn } from "@/internals/types/fields";
+import { MetaSideBarContext, TMetaSideBarContext } from "./MetaSidebarContext";
 
 export default function MetaSidebarProvider({ children }: PropsWithChildren) {
-  const { getFieldByKeys } = useEngine();
+  const { engine } = useEngine();
   const [currentEditingField, setCurrentEditingField] =
     useState<SomeFieldExceptColumn | null>(null);
 
   const updateCurrentEditingField: TMetaSideBarContext["updateCurrentEditingField"] =
-    (fieldKey, columnKey) => {
-      const field = getFieldByKeys(fieldKey, columnKey);
+    (fieldKey) => {
+      const field = engine.fields[fieldKey] as SomeFieldExceptColumn;
 
       setCurrentEditingField(field);
     };

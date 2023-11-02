@@ -1,14 +1,15 @@
 import { useEngine } from "@/context/engine/EngineProvider";
 import { ItemAsField, ItemAsOption, ItemTypes } from "@/internals/types/DND";
+import { Indexes } from "@/internals/types/engine";
 import { ReactNode } from "react";
 import { useDrop } from "react-dnd";
 
 export default function RightDropZone({
   fieldKey,
-  columnKey,
+  indexes,
 }: {
   fieldKey: string;
-  columnKey?: string;
+  indexes: Indexes[string];
 }) {
   const { moveField, addFieldToSide, moveFieldToSide } = useEngine();
 
@@ -29,18 +30,17 @@ export default function RightDropZone({
               option,
               name: "t",
               label: "New label",
-              fieldKey,
-              columnKey,
+              toIndexes: indexes,
               side: "right",
             });
         }
       } else {
         const field = item as ItemAsField;
         moveFieldToSide({
-          fieldKey: field.engineField.key,
-          columnKey: field.columnKey,
-          toFieldKey: fieldKey,
-          toColumnKey: columnKey,
+          sourceFieldKey: field.engineField.key,
+          targetFieldKey: fieldKey,
+          sourceIndexes: field.indexes,
+          targetIndexes: indexes,
           side: "right",
         });
       }

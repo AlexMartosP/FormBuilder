@@ -4,16 +4,17 @@ import { useEffect, useRef } from "react";
 import { useDrag } from "react-dnd";
 import { getEmptyImage } from "react-dnd-html5-backend";
 import InputField from "./InputField";
+import { Indexes } from "@/internals/types/engine";
 
 export default function DraggableInputField({
   engineField,
   value,
-  columnKey,
+  indexes,
   ...extraProps
 }: {
   engineField: IInputField;
   value: any;
-  columnKey?: string;
+  indexes: Indexes[string];
 }) {
   const [{ isDragging }, drag, dragPreview] = useDrag(
     () => ({
@@ -24,7 +25,7 @@ export default function DraggableInputField({
         },
         value: value,
         width: widthElementRef.current?.getBoundingClientRect().width,
-        columnKey,
+        indexes,
       }),
       collect: (monitor) => ({
         isDragging: monitor.isDragging(),

@@ -7,7 +7,7 @@ import { AvailableOptionIds } from "../types/ids";
 
 class ColumnField implements IColumnField {
   amount: number;
-  columns: SomeFieldExceptColumn[][];
+  columns: string[][];
   key: string;
   id: AvailableOptionIds = "columns";
   // readonly fields: Exclude<SomeField, IColumnField>[]
@@ -18,15 +18,15 @@ class ColumnField implements IColumnField {
     this.key = crypto.randomUUID();
   }
 
-  addField(field: SomeFieldExceptColumn, column: number, index: number) {
-    this.columns[column].splice(index, 0, field);
+  addField(fieldKey: string, column: number, index: number) {
+    this.columns[column].splice(index, 0, fieldKey);
   }
 
   removeField(fieldKey: string, columnIndex?: number) {
     const idx = !columnIndex ? this.getFieldIndex(fieldKey) : { columnIndex };
 
     this.columns[idx.columnIndex] = this.columns[idx.columnIndex].filter(
-      (f) => f.key !== fieldKey
+      (f) => f !== fieldKey
     );
   }
 
@@ -36,9 +36,7 @@ class ColumnField implements IColumnField {
       columnIndex < this.columns.length;
       columnIndex++
     ) {
-      const idx = this.columns[columnIndex].findIndex(
-        (f) => f.key === fieldKey
-      );
+      const idx = this.columns[columnIndex].findIndex((f) => f === fieldKey);
 
       if (idx !== -1) {
         return { fieldIndex: idx, columnIndex: columnIndex };

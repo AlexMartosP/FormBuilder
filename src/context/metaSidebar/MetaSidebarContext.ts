@@ -7,5 +7,5 @@ export const MetaSideBarContext = createContext<TMetaSideBarContext | null>(
 
 export type TMetaSideBarContext = {
   currentEditingField: SomeFieldExceptColumn | null;
-  updateCurrentEditingField: (fieldKey: string, columnKey?: string) => void;
+  updateCurrentEditingField: (fieldKey: string) => void;
 };

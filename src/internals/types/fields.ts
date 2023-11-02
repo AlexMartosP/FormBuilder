@@ -70,14 +70,14 @@ export interface IColumnField {
   id: AvailableOptionIds;
   key: string;
   amount: number;
-  columns: SomeFieldExceptColumn[][];
-  addField(field: SomeFieldExceptColumn, column: number, index: number): void;
+  columns: string[][];
+  addField(fieldKey: string, column: number, index: number): void;
   removeField(fieldKey: string, columnIndex?: number): void;
   getFieldIndex(fieldKey: string): {
     fieldIndex: number | null;
     columnIndex: number | null;
   };
-  getSingleFilledColumnFields(): SomeFieldExceptColumn[] | null;
+  getSingleFilledColumnFields(): string[] | null;
 }
 
 // Fields union
