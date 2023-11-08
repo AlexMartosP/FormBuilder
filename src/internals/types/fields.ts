@@ -1,17 +1,21 @@
 import { ZodType } from "zod";
 import { Element, Props } from "./helpers";
-import { AvailableOptionIds } from "./ids";
+import { AvailableFieldIds, AvailableOptionIds } from "./ids";
+import { Schema } from "./engine";
 
 // Base
-export type Rule<Value = unknown> = {
-  value: Value;
-  errorMessage: string;
-} | null;
+export type Rule = {
+  enabled: boolean;
+  label: string;
+  type: AvailableFieldIds;
+  value: string;
+  errorMessage?: string;
+};
 
 export type RuleSet = {
-  required: Rule<boolean>;
-  minLength: Rule<number>;
-  maxLength: Rule<number>;
+  required: Rule;
+  minLength?: Rule;
+  maxLength?: Rule;
 };
 
 export type MetaField = {
@@ -27,7 +31,7 @@ type BaseField = {
   label: string;
   key: string;
   name: string;
-  getZodType(): ZodType;
+  getZodType(): Schema[string];
   getDefaultValue(): unknown;
 } & MetaField;
 
@@ -93,3 +97,5 @@ export type SomeFieldExceptColumn = Exclude<SomeField, IColumnField>;
 
 // Unions
 export type Primitivies = "string" | "number";
+export type SupportedValidators = "zod";
+export type SupportedFormRenderers = "react-hook-form";

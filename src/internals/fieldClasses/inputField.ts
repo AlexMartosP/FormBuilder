@@ -36,19 +36,62 @@ class InputField implements IInputField {
     this.primitive = metaFieldsPreset[id].primitive;
   }
 
-  getZodType(): z.ZodType {
+  getZodType() {
+    let type: z.ZodString | z.ZodNumber;
+    let code = "";
+
     switch (this.props.type) {
       case "text":
-        return z.string();
+        type = z.string();
+        code = "z.string()";
+        break;
       case "number":
-        return z.number();
+        type = z.coerce.number();
+        code = "z.coerce.string()";
+        break;
       case "email":
-        return z.string().email();
+        type = z.string().email();
+        code = "z.string().email()";
+        break;
       case "tel":
-        return z.number();
+        type = z.number();
+        code = "z.number()";
+        break;
       default:
         throw new Error("Type not valid " + this.props.type);
     }
+
+    if (this.rules.required?.enabled) {
+      type = type.min(1, {
+        message: this.rules.required.errorMessage,
+      });
+
+      code += `.min(1, {
+        message: ${this.rules.required.errorMessage},
+      })`;
+    }
+
+    if (this.rules.maxLength?.enabled) {
+      type = (type as z.ZodNumber).max(parseInt(this.rules.maxLength.value), {
+        message: this.rules.maxLength.errorMessage,
+      });
+
+      code += `.max(${parseInt(this.rules.maxLength.value)}, {
+        message: ${this.rules.maxLength.errorMessage},
+      })`;
+    }
+
+    if (this.rules.minLength?.enabled) {
+      type = (type as z.ZodNumber).min(parseInt(this.rules.minLength.value), {
+        message: this.rules.minLength.errorMessage,
+      });
+
+      code += `.min(${parseInt(this.rules.minLength.value)}, {
+        message: ${this.rules.minLength.errorMessage},
+      })`;
+    }
+
+    return { type, code };
   }
 
   getDefaultValue(): unknown {

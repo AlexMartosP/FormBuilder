@@ -2,7 +2,13 @@ import { ZodType } from "zod";
 import { IColumnField, SomeField, SomeFieldExceptColumn } from "./fields";
 import ColumnField from "../fieldClasses/columnsField";
 
-export type Schema = Record<string, ZodType>;
+export type Schema = Record<
+  string,
+  {
+    type: object;
+    code: string;
+  }
+>;
 export type DefaultValues = Record<string, unknown>;
 export type Indexes = Record<
   string,
