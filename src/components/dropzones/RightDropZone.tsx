@@ -11,7 +11,7 @@ export default function RightDropZone({
   fieldKey: string;
   indexes: Indexes[string];
 }) {
-  const { moveField, addFieldToSide, moveFieldToSide } = useEngine();
+  const { moveField, addField, moveFieldToSide } = useEngine();
 
   const [{ isOver, canDrop }, drop] = useDrop({
     accept: [ItemTypes.Option, ItemTypes.Field],
@@ -26,12 +26,10 @@ export default function RightDropZone({
           case "number_input":
           case "email_input":
           case "phone_input":
-            addFieldToSide({
-              option,
-              name: "t",
-              label: "New label",
+            addField({
+              id: option.id,
               toIndexes: indexes,
-              side: "right",
+              position: "right",
             });
         }
       } else {

@@ -4,11 +4,10 @@ import Columns from "@/components/Columns";
 import EmptyColumn from "@/components/EmptyColumn";
 import BottomDropZone from "@/components/dropzones/BottomDropZone";
 import SidesDropZone from "@/components/dropzones/SidesDropZone";
-import DraggableInputField from "@/components/inputField/DraggableInputField";
+import DraggableField from "@/components/field/DraggableField";
 import { Form, FormField, FormItem, FormMessage } from "@/components/ui/Form";
 import { useEngine } from "@/context/engine/EngineProvider";
 import ColumnField from "@/internals/fieldClasses/columnsField";
-import InputField from "@/internals/fieldClasses/inputField";
 import { Indexes, Schema } from "@/internals/types/engine";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -40,7 +39,7 @@ export default function FormPreview() {
     if (!(fieldKey instanceof ColumnField)) {
       const fieldMeta = engine.fields[fieldKey];
 
-      if (fieldMeta instanceof InputField) {
+      if (fieldMeta) {
         return (
           <BottomDropZone
             key={fieldMeta.key}
@@ -54,7 +53,7 @@ export default function FormPreview() {
                   name={fieldMeta.name}
                   render={({ field }) => (
                     <FormItem>
-                      <DraggableInputField
+                      <DraggableField
                         engineField={fieldMeta}
                         indexes={indexes}
                         {...field}
@@ -70,7 +69,7 @@ export default function FormPreview() {
                 name={fieldMeta.name}
                 render={({ field }) => (
                   <FormItem>
-                    <DraggableInputField
+                    <DraggableField
                       engineField={fieldMeta}
                       indexes={indexes}
                       {...field}

@@ -1,25 +1,20 @@
 import { ItemTypes } from "@/internals/types/DND";
-import { IInputField } from "@/internals/types/fields";
+import { Indexes } from "@/internals/types/engine";
+import { SomeFieldExceptColumn } from "@/internals/types/fields";
 import { useEffect, useRef } from "react";
 import { useDrag } from "react-dnd";
 import { getEmptyImage } from "react-dnd-html5-backend";
-import InputField from "./InputField";
-import { Indexes } from "@/internals/types/engine";
-import {
-  ContextMenu,
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuTrigger,
-} from "../ui/ContextMenu";
+import Field from "./Field";
 import FieldContextMenu from "../FieldContextMenu";
+import { ContextMenu, ContextMenuTrigger } from "../ui/ContextMenu";
 
-export default function DraggableInputField({
+export default function DraggableField({
   engineField,
   value,
   indexes,
-  ...extraProps
+  ...props
 }: {
-  engineField: IInputField;
+  engineField: SomeFieldExceptColumn;
   value: any;
   indexes: Indexes[string];
 }) {
@@ -57,11 +52,7 @@ export default function DraggableInputField({
               opacity: isDragging ? "0.5" : "1",
             }}
           >
-            <InputField
-              engineField={engineField}
-              isPreview={false}
-              {...{ ...extraProps, value }}
-            />
+            <Field field={engineField} {...props} />
           </div>
         </div>
       </ContextMenuTrigger>

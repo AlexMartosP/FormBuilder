@@ -10,8 +10,9 @@ import Preview from "./_components/Preview";
 import MetaSidebarProvider from "@/context/metaSidebar/MetaSidebarProvider";
 import ConfigProvider from "@/context/config/ConfigProvider";
 import Toolbar from "./_components/Toolbar";
+import dynamic from "next/dynamic";
 
-export default function Home() {
+function Home() {
   return (
     <main>
       <ConfigProvider>
@@ -38,3 +39,7 @@ export default function Home() {
     </main>
   );
 }
+
+export default dynamic(() => Promise.resolve(Home), {
+  ssr: false,
+});

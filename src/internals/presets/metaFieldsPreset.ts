@@ -1,34 +1,12 @@
 import { Input } from "@/components/ui/Input";
 import { PresetObject } from "../types/helpers";
-import { RuleSet } from "../types/fields";
-
-const rulePresets: RuleSet = {
-  required: {
-    enabled: true,
-    value: "true",
-    label: "Required",
-    type: "checkbox",
-  },
-  minLength: {
-    enabled: false,
-    value: "0",
-    label: "Min length",
-    type: "number_input",
-    errorMessage: "Input has to be at least 0 characters",
-  },
-  maxLength: {
-    enabled: false,
-    value: "40",
-    label: "Max length",
-    type: "number_input",
-    errorMessage: "Input has to be at most 40 characters",
-  },
-};
+import { rulePresets } from "./rulePresets";
 
 const metaFieldsPreset: PresetObject = {
   text_input: {
     props: {
       type: "text",
+      placeholder: "",
     },
     primitive: "string",
     rules: {
@@ -36,11 +14,12 @@ const metaFieldsPreset: PresetObject = {
       minLength: rulePresets["minLength"],
       maxLength: rulePresets["maxLength"],
     },
-    element: Input,
+    // element: Input,
   },
   number_input: {
     props: {
       type: "number",
+      placeholder: "",
     },
     primitive: "number",
     rules: {
@@ -48,11 +27,12 @@ const metaFieldsPreset: PresetObject = {
       minLength: rulePresets["minLength"],
       maxLength: rulePresets["maxLength"],
     },
-    element: Input,
+    // element: Input,
   },
   email_input: {
     props: {
       type: "email",
+      placeholder: "",
     },
     primitive: "string",
     rules: {
@@ -60,11 +40,12 @@ const metaFieldsPreset: PresetObject = {
       minLength: rulePresets["minLength"],
       maxLength: rulePresets["maxLength"],
     },
-    element: Input,
+    // element: Input,
   },
   phone_input: {
     props: {
       type: "tel",
+      placeholder: "",
     },
     primitive: "string",
     rules: {
@@ -72,22 +53,26 @@ const metaFieldsPreset: PresetObject = {
       minLength: rulePresets["minLength"],
       maxLength: rulePresets["maxLength"],
     },
-    element: Input,
+    // element: Input,
   },
   checkbox: {
-    element: "",
+    // element: "",
     rules: {
       required: rulePresets["required"],
     },
-    props: {},
+    props: {
+      defaultValue: "default",
+    },
     primitive: "string",
   },
   radio: {
-    element: "",
+    // element: "",
     rules: {
       required: rulePresets["required"],
     },
-    props: {},
+    props: {
+      defaultValue: "default",
+    },
     primitive: "string",
   },
 };

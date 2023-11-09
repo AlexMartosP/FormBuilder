@@ -3,7 +3,7 @@ import { IInputField, Primitivies, RuleSet } from "../types/fields";
 import { Element, Props } from "../types/helpers";
 import { AvailableFieldIds, AvailableOptionIds } from "../types/ids";
 import { TOption } from "../types/options";
-import metaFieldsPreset from "../constants/metaFieldsPreset";
+import metaFieldsPreset from "../presets/metaFieldsPreset";
 
 type ConstructorInput = {
   name: string;

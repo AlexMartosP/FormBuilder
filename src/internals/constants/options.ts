@@ -1,7 +1,14 @@
-import { Binary, Columns, Mail, PenBox, Phone } from "lucide-react";
-import { Option } from "../types/options";
+import {
+  Binary,
+  CheckSquare,
+  Columns,
+  Mail,
+  PenBox,
+  Phone,
+} from "lucide-react";
+import { TOption } from "../types/options";
 
-const options: Option[] = [
+const options: TOption[] = [
   {
     label: "Text input",
     icon: PenBox,
@@ -23,10 +30,15 @@ const options: Option[] = [
     id: "phone_input",
   },
   {
-    label: "Columns",
-    icon: Columns,
-    id: "columns",
+    label: "Checkboxes",
+    icon: CheckSquare,
+    id: "checkbox",
   },
+  // {
+  //   label: "Columns",
+  //   icon: Columns,
+  //   id: "columns",
+  // },
 ];
 
 export default options;

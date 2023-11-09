@@ -10,12 +10,18 @@ import { PropsWithChildren, useContext, useState } from "react";
 import {
   AddColumnFn,
   AddFieldFn,
-  AddFieldToSideFn,
   EngineContext,
   MoveFieldFn,
   MoveFieldToSideFn,
   UpdateFieldFn,
 } from "./EngineContext";
+import { createField } from "@/internals/utils/createField";
+import { getZodType } from "@/internals/utils/fieldTypeGenerators/getzodType";
+import { getDefaultValue } from "@/internals/utils/getDefaultValue";
+import {
+  addFieldToBottom,
+  addFieldToSide,
+} from "@/internals/utils/addFieldToStructure";
 
 const defaultState: IEngine = {
   fields: {},
@@ -26,48 +32,12 @@ const defaultState: IEngine = {
 
 // Dummy
 const dummyFields = [
-  new InputField({
-    label: options[0].label,
-    icon: options[0].icon,
-    id: options[0].id,
-    name: "username",
-    placeholder: "Username",
-  }),
-  new InputField({
-    label: options[1].label,
-    icon: options[1].icon,
-    id: options[1].id,
-    name: "age",
-    placeholder: "Username",
-  }),
-  new InputField({
-    label: options[2].label,
-    icon: options[2].icon,
-    id: options[2].id,
-    name: "email",
-    placeholder: "Username",
-  }),
-  new InputField({
-    label: options[3].label,
-    icon: options[3].icon,
-    id: options[3].id,
-    name: "phone",
-    placeholder: "Username",
-  }),
-  new InputField({
-    label: options[2].label,
-    icon: options[2].icon,
-    id: options[2].id,
-    name: "email-nest",
-    placeholder: "Username",
-  }),
-  new InputField({
-    label: options[3].label,
-    icon: options[3].icon,
-    id: options[3].id,
-    name: "phone-nest",
-    placeholder: "Username",
-  }),
+  createField(options[0].id as AvailableFieldIds),
+  createField(options[1].id as AvailableFieldIds),
+  createField(options[2].id as AvailableFieldIds),
+  createField(options[3].id as AvailableFieldIds),
+  createField(options[2].id as AvailableFieldIds),
+  createField(options[3].id as AvailableFieldIds),
 ];
 
 const dummyStructure = [
@@ -89,8 +59,8 @@ for (let i = 0; i < dummyFields.length; i++) {
 
   defaultState.fields[field.key] = field;
 
-  defaultState.schema[field.name] = field.getZodType();
-  defaultState.defaultValues[field.name] = field.getDefaultValue();
+  defaultState.schema[field.name] = getZodType(field);
+  defaultState.defaultValues[field.name] = getDefaultValue(field);
 }
 
 function getNewTargetIndex(
@@ -108,45 +78,21 @@ function getNewTargetIndex(
 export default function EngineProvider({ children }: PropsWithChildren) {
   const [engine, setEngine] = useState(defaultState);
 
-  const addField: AddFieldFn = ({ option, name, label, toIndexes }) => {
+  const addField: AddFieldFn = ({ id, toIndexes, position }) => {
     const newEngine = { ...engine };
 
-    const field = new InputField({
-      ...option,
-      id: option.id as AvailableFieldIds,
-      name,
-      label,
-      placeholder: "",
-    });
+    const field = createField(id);
 
-    if (newEngine.structure.length === 0) {
-      newEngine.structure.push(field.key);
-    } else {
-      if (!toIndexes.columnIndex) {
-        newEngine.structure.splice(toIndexes.topIndex + 1, 0, field.key);
-      } else {
-        (newEngine.structure[toIndexes.topIndex] as ColumnField).addField(
-          field.key,
-          toIndexes.columnIndex,
-          toIndexes.fieldIndex + 1
-        );
-      }
-    }
+    const newStructure =
+      position === "bottom"
+        ? addFieldToBottom(newEngine.structure, field.key, toIndexes)
+        : addFieldToSide(newEngine.structure, field.key, toIndexes, position);
 
     newEngine.fields[field.key] = field;
+    newEngine.structure = newStructure;
 
-    newEngine.schema[field.name] = field.getZodType();
-    newEngine.defaultValues[field.name] = field.getDefaultValue();
-
-    setEngine(newEngine);
-  };
-
-  const addColumn: AddColumnFn = ({ amount, targetIndexes }) => {
-    const newEngine = { ...engine };
-
-    const column = new ColumnField(amount);
-
-    newEngine.structure.splice(targetIndexes.topIndex + 1, 0, column);
+    newEngine.schema[field.name] = getZodType(field);
+    newEngine.defaultValues[field.name] = getDefaultValue(field);
 
     setEngine(newEngine);
   };
@@ -158,8 +104,6 @@ export default function EngineProvider({ children }: PropsWithChildren) {
     targetIndexes,
   }) => {
     const newEngine = { ...engine };
-
-    console.log(sourceIndexes, targetIndexes);
 
     let singleColumnFieldsCount: number | undefined;
     if (!sourceIndexes.columnIndex) {
@@ -212,50 +156,6 @@ export default function EngineProvider({ children }: PropsWithChildren) {
       );
     }
 
-    setEngine(newEngine);
-  };
-
-  const addFieldToSide: AddFieldToSideFn = ({
-    option,
-    name,
-    label,
-    toIndexes,
-    side,
-  }) => {
-    const newEngine = { ...engine };
-
-    const field = new InputField({
-      ...option,
-      id: option.id as AvailableFieldIds,
-      name,
-      label,
-      placeholder: "",
-    });
-
-    if (!toIndexes.columnIndex) {
-      const column = new ColumnField(2);
-
-      const targetFieldKey = newEngine.structure[toIndexes.topIndex] as string;
-
-      switch (side) {
-        case "left":
-          column.addField(field.key, 0, 0);
-          column.addField(targetFieldKey, 1, 0);
-          break;
-        case "right":
-          column.addField(field.key, 1, 0);
-          column.addField(targetFieldKey, 0, 0);
-          break;
-      }
-
-      newEngine.structure[toIndexes.topIndex] = column;
-    } else {
-    }
-
-    newEngine.fields[field.key] = field;
-
-    newEngine.schema[field.name] = field.getZodType();
-    newEngine.defaultValues[field.name] = field.getDefaultValue();
     setEngine(newEngine);
   };
 
@@ -321,8 +221,8 @@ export default function EngineProvider({ children }: PropsWithChildren) {
     delete newEngine.schema[currentField.name];
     delete newEngine.defaultValues[currentField.name];
 
-    newEngine.schema[updatedField.name] = updatedField.getZodType();
-    newEngine.defaultValues[updatedField.name] = updatedField.getDefaultValue();
+    newEngine.schema[updatedField.name] = getZodType(updatedField);
+    newEngine.defaultValues[updatedField.name] = getDefaultValue(updatedField);
     setEngine(newEngine);
   };
 
@@ -331,9 +231,7 @@ export default function EngineProvider({ children }: PropsWithChildren) {
       value={{
         addField,
         engine,
-        addColumn,
         moveField,
-        addFieldToSide,
         moveFieldToSide,
         updateField,
       }}
@@ -572,5 +470,15 @@ export function useEngine() {
 
 //   newEngine.schema[field.name] = field.getZodType();
 //   newEngine.defaultValues[field.name] = field.getDefaultValue();
+//   setEngine(newEngine);
+// };
+
+// const addColumn: AddColumnFn = ({ amount, targetIndexes }) => {
+//   const newEngine = { ...engine };
+
+//   const column = new ColumnField(amount);
+
+//   newEngine.structure.splice(targetIndexes.topIndex + 1, 0, column);
+
 //   setEngine(newEngine);
 // };

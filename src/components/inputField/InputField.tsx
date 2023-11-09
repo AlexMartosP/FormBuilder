@@ -1,5 +1,6 @@
 import { IInputField } from "@/internals/types/fields";
 import { FormControl, FormLabel } from "../ui/Form";
+import Field from "../field/Field";
 
 export default function InputField({
   engineField,
@@ -17,16 +18,13 @@ export default function InputField({
         <>
           <FormLabel>{engineField.label}</FormLabel>
           <FormControl>
-            <engineField.element
-              {...engineField.props}
-              {...{ ...extraProps, value }}
-            />
+            <Field field={engineField} />
           </FormControl>
         </>
       ) : (
         <>
           <label>{engineField.label}</label>
-          <engineField.element {...engineField.props} defaultValue={value} />
+          <Field field={engineField} />
         </>
       )}
     </>

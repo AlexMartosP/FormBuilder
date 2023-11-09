@@ -1,4 +1,4 @@
-import Field from "@/components/Field";
+import Field from "@/components/field/Field";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
@@ -79,8 +79,6 @@ export default function Meta() {
             {value.enabled && value.type !== "checkbox" && (
               <div className="pt-2 pb-4">
                 <Field
-                  type={value.type}
-                  name={key}
                   placeholder={value.label}
                   defaultValue={value.value.toString()}
                   onChange={(value) =>

@@ -3,6 +3,15 @@ import { Element, Props } from "./helpers";
 import { AvailableFieldIds, AvailableOptionIds } from "./ids";
 import { Schema } from "./engine";
 
+export type Test = {
+  text_input: IInputField;
+  number_input: IInputField;
+  email_input: IInputField;
+  phone_input: IInputField;
+  checkbox: ICheckboxField;
+  radio: IRadioField;
+};
+
 // Base
 export type Rule = {
   enabled: boolean;
@@ -18,50 +27,77 @@ export type RuleSet = {
   maxLength?: Rule;
 };
 
+export type ExtraProp = {
+  label: string;
+  type: AvailableFieldIds;
+  value: string | unknown[];
+};
+
+export type ExtraProps = Record<string, ExtraProp>;
+
+// Should include extra props like options in checkbox
+// Props should be editable with different fields
+// Will be converted to props object on render
 export type MetaField = {
   // May not need "element"
-  element: Element;
+  // element: Element;
   rules: RuleSet;
   props: Props;
   primitive: Primitivies;
 };
 
 type BaseField = {
-  id: AvailableOptionIds;
+  id: AvailableFieldIds;
   label: string;
   key: string;
   name: string;
-  getZodType(): Schema[string];
-  getDefaultValue(): unknown;
+  extraProps?: ExtraProps;
+  // getZodType(): Schema[string];
+  // getDefaultValue(): unknown;
 } & MetaField;
 
 // Input
 export type InputFieldProps = {
   type: string;
+  placeholder: string;
 } & Props;
 export interface IInputField extends BaseField {
-  props: Props;
-  placeholder: string;
+  props: InputFieldProps;
 }
 
 // Password
 
 // Select
-interface ISelectField extends BaseField {
-  options: Record<string, string>;
+export type SelectFieldProps = {
   defaultValue: string;
+} & Props;
+interface ISelectField extends BaseField {
+  props: SelectFieldProps;
+  extraProps: {
+    options: ExtraProp;
+  };
 }
 
 // Radio
-interface IRadioField extends BaseField {
-  options: Record<string, string>;
+export type RadioFieldProps = {
   defaultValue: string;
+} & Props;
+interface IRadioField extends BaseField {
+  props: RadioFieldProps;
+  extraProps: {
+    options: ExtraProp;
+  };
 }
 
 // Checkbox
-interface ICheckboxField extends BaseField {
-  options: Record<string, string>;
+export type CheckboxFieldProps = {
   defaultValue: string;
+} & Props;
+interface ICheckboxField extends BaseField {
+  props: CheckboxFieldProps;
+  extraProps: {
+    options: ExtraProp;
+  };
 }
 
 // File

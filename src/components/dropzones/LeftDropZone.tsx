@@ -10,7 +10,7 @@ export default function LeftDropZone({
   fieldKey: string;
   indexes: Indexes[string];
 }) {
-  const { addFieldToSide, moveFieldToSide } = useEngine();
+  const { moveFieldToSide, addField } = useEngine();
 
   const [{ isOver, canDrop }, drop] = useDrop({
     accept: [ItemTypes.Option, ItemTypes.Field],
@@ -25,12 +25,10 @@ export default function LeftDropZone({
           case "number_input":
           case "email_input":
           case "phone_input":
-            addFieldToSide({
-              option,
-              name: "t",
-              label: "New label",
+            addField({
+              id: option.id,
               toIndexes: indexes,
-              side: "left",
+              position: "left",
             });
         }
       } else {

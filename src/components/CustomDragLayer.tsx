@@ -4,6 +4,7 @@ import { ItemTypes } from "@/internals/types/DND";
 import { useDragLayer } from "react-dnd";
 import OptionDragPreview from "./option/OptionDragPreview";
 import InputFieldPreview from "./inputField/InputFieldDragPreview";
+import FieldPreview from "./field/FieldPreview";
 
 export default function CustomDragLayer() {
   const { item, type, isDragging, currentOffset } = useDragLayer((monitor) => ({
@@ -19,7 +20,7 @@ export default function CustomDragLayer() {
         return <OptionDragPreview option={item} width={item.width} />;
       case ItemTypes.Field:
         return (
-          <InputFieldPreview
+          <FieldPreview
             engineField={item.engineField}
             width={item.width}
             value={item.value}

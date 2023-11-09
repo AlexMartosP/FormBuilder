@@ -5,6 +5,7 @@ import { useMetaSideBarContext } from "@/context/metaSidebar/MetaSidebarProvider
 import { ItemAsField, ItemAsOption, ItemTypes } from "@/internals/types/DND";
 import { Indexes } from "@/internals/types/engine";
 import { SomeField } from "@/internals/types/fields";
+import { AvailableFieldIds } from "@/internals/types/ids";
 import { TOption } from "@/internals/types/options";
 import { ReactNode } from "react";
 import { useDrop } from "react-dnd";
@@ -18,7 +19,7 @@ export default function BottomDropZone({
   fieldKey: string;
   indexes: Indexes[string];
 }) {
-  const { addField, addColumn, moveField } = useEngine();
+  const { addField, moveField } = useEngine();
   const { updateCurrentEditingField } = useMetaSideBarContext();
 
   const [{ isOver, canDrop }, drop] = useDrop({
@@ -29,24 +30,11 @@ export default function BottomDropZone({
       if (itemType === ItemTypes.Option) {
         const option = item as ItemAsOption;
 
-        switch (option.id) {
-          case "columns":
-            addColumn({
-              amount: 2,
-              targetIndexes: indexes,
-            });
-            break;
-          case "text_input":
-          case "number_input":
-          case "email_input":
-          case "phone_input":
-            addField({
-              option,
-              name: "t",
-              label: "New label",
-              toIndexes: indexes,
-            });
-        }
+        addField({
+          id: option.id as AvailableFieldIds,
+          toIndexes: indexes,
+          position: "bottom",
+        });
 
         updateCurrentEditingField(fieldKey);
       } else {
