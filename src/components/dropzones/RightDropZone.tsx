@@ -11,7 +11,7 @@ export default function RightDropZone({
   fieldKey: string;
   indexes: Indexes[string];
 }) {
-  const { moveField, addField, moveFieldToSide } = useEngine();
+  const { moveField, addField } = useEngine();
 
   const [{ isOver, canDrop }, drop] = useDrop({
     accept: [ItemTypes.Option, ItemTypes.Field],
@@ -34,12 +34,12 @@ export default function RightDropZone({
         }
       } else {
         const field = item as ItemAsField;
-        moveFieldToSide({
+
+        moveField({
           sourceFieldKey: field.engineField.key,
-          targetFieldKey: fieldKey,
           sourceIndexes: field.indexes,
           targetIndexes: indexes,
-          side: "right",
+          position: "right",
         });
       }
     },

@@ -2,26 +2,21 @@
 
 import options from "@/internals/constants/options";
 import ColumnField from "@/internals/fieldClasses/columnsField";
-import InputField from "@/internals/fieldClasses/inputField";
 import { IEngine } from "@/internals/types/engine";
-import { IColumnField } from "@/internals/types/fields";
 import { AvailableFieldIds } from "@/internals/types/ids";
-import { PropsWithChildren, useContext, useState } from "react";
-import {
-  AddColumnFn,
-  AddFieldFn,
-  EngineContext,
-  MoveFieldFn,
-  MoveFieldToSideFn,
-  UpdateFieldFn,
-} from "./EngineContext";
 import { createField } from "@/internals/utils/createField";
 import { getZodType } from "@/internals/utils/fieldTypeGenerators/getzodType";
 import { getDefaultValue } from "@/internals/utils/getDefaultValue";
+import { addFieldToBottom } from "@/internals/utils/structure/addFieldToBottom";
+import { addFieldToSide } from "@/internals/utils/structure/addFieldToSide";
+import { removeFieldFromStructure } from "@/internals/utils/structure/removeFieldFromStructure";
+import { PropsWithChildren, useContext, useState } from "react";
 import {
-  addFieldToBottom,
-  addFieldToSide,
-} from "@/internals/utils/addFieldToStructure";
+  AddFieldFn,
+  EngineContext,
+  MoveFieldFn,
+  UpdateFieldFn,
+} from "./EngineContext";
 
 const defaultState: IEngine = {
   fields: {},
@@ -69,10 +64,10 @@ function getNewTargetIndex(
   extraFieldsCount?: number
 ) {
   if (movingFieldIndex < targetFieldIndex) {
-    return targetFieldIndex + (extraFieldsCount ?? 0);
+    return targetFieldIndex + (extraFieldsCount ?? 0) - 1;
   }
 
-  return targetFieldIndex + 1;
+  return targetFieldIndex;
 }
 
 export default function EngineProvider({ children }: PropsWithChildren) {
@@ -99,115 +94,44 @@ export default function EngineProvider({ children }: PropsWithChildren) {
 
   const moveField: MoveFieldFn = ({
     sourceFieldKey,
-    targetFieldKey,
     sourceIndexes,
     targetIndexes,
+    position,
   }) => {
     const newEngine = { ...engine };
 
-    let singleColumnFieldsCount: number | undefined;
-    if (!sourceIndexes.columnIndex) {
-      newEngine.structure = newEngine.structure.filter(
-        (key) => key !== sourceFieldKey
-      );
-    } else {
-      const columnField = newEngine.structure[
-        sourceIndexes.topIndex
-      ] as ColumnField;
+    let { newStructure, singleColumnFieldsCount } = removeFieldFromStructure(
+      newEngine.structure,
+      sourceFieldKey,
+      sourceIndexes
+    );
 
-      columnField.removeField(sourceFieldKey, sourceIndexes.columnIndex);
+    const newIndex = getNewTargetIndex(
+      sourceIndexes.topIndex,
+      targetIndexes.topIndex,
+      singleColumnFieldsCount
+    );
 
-      const singleColumnFields = columnField.getSingleFilledColumnFields();
+    newStructure =
+      position === "bottom"
+        ? addFieldToBottom(newStructure, sourceFieldKey, {
+            topIndex: newIndex,
+            columnIndex: null,
+            fieldIndex: newIndex,
+          })
+        : addFieldToSide(
+            newStructure,
+            sourceFieldKey,
+            {
+              topIndex: newIndex,
+              columnIndex: targetIndexes.columnIndex,
+              fieldIndex: newIndex,
+            },
+            position
+          );
 
-      if (singleColumnFields) {
-        singleColumnFieldsCount = singleColumnFields.length;
+    newEngine.structure = newStructure;
 
-        newEngine.structure.splice(
-          sourceIndexes.topIndex,
-          1,
-          ...singleColumnFields
-        );
-      }
-    }
-
-    if (!targetIndexes.columnIndex) {
-      newEngine.structure.splice(
-        getNewTargetIndex(
-          sourceIndexes.topIndex,
-          targetIndexes.topIndex,
-          singleColumnFieldsCount
-        ),
-        0,
-        sourceFieldKey
-      );
-    } else {
-      const columnField = newEngine.structure[
-        getNewTargetIndex(
-          sourceIndexes.topIndex,
-          targetIndexes.topIndex,
-          singleColumnFieldsCount
-        ) - 1
-      ] as ColumnField;
-
-      columnField.addField(
-        sourceFieldKey,
-        targetIndexes.columnIndex,
-        targetIndexes.fieldIndex + 1
-      );
-    }
-
-    setEngine(newEngine);
-  };
-
-  const moveFieldToSide: MoveFieldToSideFn = ({
-    sourceFieldKey,
-    targetFieldKey,
-    sourceIndexes,
-    targetIndexes,
-    side,
-  }) => {
-    const newEngine = { ...engine };
-
-    if (!targetIndexes.columnIndex) {
-      const column = new ColumnField(2);
-
-      switch (side) {
-        case "left":
-          column.addField(sourceFieldKey, 0, 0);
-          column.addField(targetFieldKey, 1, 0);
-          break;
-        case "right":
-          column.addField(sourceFieldKey, 1, 0);
-          column.addField(targetFieldKey, 0, 0);
-          break;
-      }
-
-      newEngine.structure[targetIndexes.topIndex] = column;
-    } else {
-    }
-
-    if (sourceIndexes.columnIndex) {
-      (newEngine.structure[sourceIndexes.topIndex] as IColumnField).removeField(
-        sourceFieldKey,
-        sourceIndexes.columnIndex
-      );
-
-      const singleColumnFields = (
-        newEngine.structure[sourceIndexes.topIndex] as IColumnField
-      ).getSingleFilledColumnFields();
-
-      if (singleColumnFields) {
-        newEngine.structure.splice(
-          sourceIndexes.topIndex,
-          1,
-          ...singleColumnFields
-        );
-      }
-    } else {
-      newEngine.structure.splice(sourceIndexes.topIndex, 1);
-    }
-
-    console.log(newEngine);
     setEngine(newEngine);
   };
 
@@ -232,7 +156,6 @@ export default function EngineProvider({ children }: PropsWithChildren) {
         addField,
         engine,
         moveField,
-        moveFieldToSide,
         updateField,
       }}
     >

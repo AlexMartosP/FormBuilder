@@ -10,7 +10,7 @@ export default function LeftDropZone({
   fieldKey: string;
   indexes: Indexes[string];
 }) {
-  const { moveFieldToSide, addField } = useEngine();
+  const { moveField, addField } = useEngine();
 
   const [{ isOver, canDrop }, drop] = useDrop({
     accept: [ItemTypes.Option, ItemTypes.Field],
@@ -33,12 +33,12 @@ export default function LeftDropZone({
         }
       } else {
         const field = item as ItemAsField;
-        moveFieldToSide({
+
+        moveField({
           sourceFieldKey: field.engineField.key,
-          targetFieldKey: fieldKey,
           sourceIndexes: field.indexes,
           targetIndexes: indexes,
-          side: "left",
+          position: "left",
         });
       }
     },

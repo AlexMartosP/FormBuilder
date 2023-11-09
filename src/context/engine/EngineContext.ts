@@ -11,7 +11,6 @@ import { createContext } from "react";
 export const EngineContext = createContext<{
   addField: AddFieldFn;
   moveField: MoveFieldFn;
-  moveFieldToSide: MoveFieldToSideFn;
   engine: IEngine;
   updateField: UpdateFieldFn;
 } | null>(null);
@@ -31,19 +30,15 @@ export type AddColumnFn = (args: {
 
 export type MoveFieldFn = ({
   sourceFieldKey,
-  targetFieldKey,
   sourceIndexes,
   targetIndexes,
+  position,
 }: {
   sourceFieldKey: string;
-  targetFieldKey: string;
   sourceIndexes: Indexes[string];
   targetIndexes: Indexes[string];
+  position: Positions;
 }) => void;
-
-export type MoveFieldToSideFn = (
-  args: Parameters<MoveFieldFn>["0"] & { side: "left" | "right" }
-) => void;
 
 export type GetFieldByKeys = (
   fieldKey: string,

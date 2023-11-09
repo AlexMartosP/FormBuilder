@@ -41,9 +41,9 @@ export default function BottomDropZone({
         const field = item as ItemAsField;
         moveField({
           sourceFieldKey: field.engineField.key,
-          targetFieldKey: fieldKey,
           sourceIndexes: field.indexes,
           targetIndexes: indexes,
+          position: "bottom",
         });
       }
     },

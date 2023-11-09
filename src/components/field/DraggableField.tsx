@@ -33,7 +33,7 @@ export default function DraggableField({
         isDragging: monitor.isDragging(),
       }),
     }),
-    [value]
+    [value, indexes]
   );
   const widthElementRef = useRef<HTMLDivElement>(null);
 
