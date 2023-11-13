@@ -4,9 +4,11 @@ import { SomeFieldExceptColumn } from "@/internals/types/fields";
 export default function CheckboxField({
   field,
   value,
+  onChange,
   ...props
 }: {
   field: SomeFieldExceptColumn;
+  onChange: (...args: any[]) => void;
   value: string[];
 }) {
   return (
@@ -23,8 +25,8 @@ export default function CheckboxField({
                 name={field.name}
                 onCheckedChange={(checked) => {
                   return checked
-                    ? props.onChange([...value, option.value])
-                    : props.onChange(value?.filter((v) => v !== option.value));
+                    ? onChange([...value, option.value])
+                    : onChange(value?.filter((v) => v !== option.value));
                 }}
               />
 

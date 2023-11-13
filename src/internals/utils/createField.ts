@@ -117,13 +117,13 @@ function generateRandomLabel() {
   return fieldLabels[index];
 }
 
-function generateExtraProps(id: SupportedFields): ExtraProps {
+function generateExtraProps(id: SupportedFields): ExtraProps | null {
   switch (id) {
     case "text_input":
     case "number_input":
     case "email_input":
     case "phone_input":
-      return {};
+      return null;
     case "checkbox":
     case "radio":
       const options = [];
@@ -145,7 +145,7 @@ function generateExtraProps(id: SupportedFields): ExtraProps {
       return {
         options: {
           label: "Options",
-          type: "text_input",
+          type: "multi",
           value: options,
         },
       };

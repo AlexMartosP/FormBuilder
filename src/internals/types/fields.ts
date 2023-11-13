@@ -25,10 +25,11 @@ export type RuleSet = {
   maxLength?: Rule;
 };
 
-export type EditableExtraProp = {
+export type EditableExtraProp<Value> = {
   label: string;
   type: AvailableInternalFieldIds;
-  value: string | unknown[];
+  value: Value;
+  options?: { value: string; label: string }[];
 };
 
 export type EditableProp = {
@@ -37,15 +38,10 @@ export type EditableProp = {
   value: string;
 };
 
-export type ExtraProps = Record<string, EditableExtraProp>;
+export type ExtraProps = Record<string, EditableExtraProp<unknown>>;
 export type Props = Record<string, EditableProp>;
 
-// Should include extra props like options in checkbox
-// Props should be editable with different fields
-// Will be converted to props object on render
 export type MetaField = {
-  // May not need "element"
-  // element: Element;
   rules: RuleSet;
   props: Props;
   primitive: Primitivies;
@@ -57,8 +53,6 @@ type BaseField = {
   key: string;
   name: string;
   extraProps?: ExtraProps;
-  // getZodType(): Schema[string];
-  // getDefaultValue(): unknown;
 } & MetaField;
 
 // Input
@@ -79,7 +73,10 @@ export type SelectFieldProps = {
 interface ISelectField extends BaseField {
   props: SelectFieldProps;
   extraProps: {
-    options: EditableProp;
+    options: EditableExtraProp<{
+      value: string;
+      label: string;
+    }>;
   };
 }
 
@@ -90,7 +87,10 @@ export type RadioFieldProps = {
 interface IRadioField extends BaseField {
   props: RadioFieldProps;
   extraProps: {
-    options: EditableProp;
+    options: EditableExtraProp<{
+      value: string;
+      label: string;
+    }>;
   };
 }
 
@@ -101,7 +101,10 @@ export type CheckboxFieldProps = {
 interface ICheckboxField extends BaseField {
   props: CheckboxFieldProps;
   extraProps: {
-    options: EditableProp;
+    options: EditableExtraProp<{
+      value: string;
+      label: string;
+    }>;
   };
 }
 

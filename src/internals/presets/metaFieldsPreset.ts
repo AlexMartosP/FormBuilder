@@ -7,7 +7,7 @@ const metaFieldsPreset: PresetObject = {
     props: {
       type: {
         label: "Type",
-        type: "text_input",
+        type: "select",
         value: "text",
       },
       placeholder: {
@@ -22,13 +22,12 @@ const metaFieldsPreset: PresetObject = {
       minLength: rulePresets["minLength"],
       maxLength: rulePresets["maxLength"],
     },
-    // element: Input,
   },
   number_input: {
     props: {
       type: {
         label: "Type",
-        type: "text_input",
+        type: "select",
         value: "number",
       },
       placeholder: {
@@ -43,13 +42,12 @@ const metaFieldsPreset: PresetObject = {
       minLength: rulePresets["minLength"],
       maxLength: rulePresets["maxLength"],
     },
-    // element: Input,
   },
   email_input: {
     props: {
       type: {
         label: "Type",
-        type: "text_input",
+        type: "select",
         value: "email",
       },
       placeholder: {
@@ -64,13 +62,12 @@ const metaFieldsPreset: PresetObject = {
       minLength: rulePresets["minLength"],
       maxLength: rulePresets["maxLength"],
     },
-    // element: Input,
   },
   phone_input: {
     props: {
       type: {
         label: "Type",
-        type: "text_input",
+        type: "select",
         value: "tel",
       },
       placeholder: {
@@ -85,24 +82,21 @@ const metaFieldsPreset: PresetObject = {
       minLength: rulePresets["minLength"],
       maxLength: rulePresets["maxLength"],
     },
-    // element: Input,
   },
   checkbox: {
-    // element: "",
     rules: {
       required: rulePresets["required"],
     },
     props: {
       defaultValue: {
         label: "Default value",
-        type: "text_input",
+        type: "select",
         value: "default",
       },
     },
     primitive: "string",
   },
   radio: {
-    // element: "",
     rules: {
       required: rulePresets["required"],
     },

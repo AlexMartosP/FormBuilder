@@ -1,4 +1,4 @@
-import Field from "@/components/field/Field";
+import Field from "@/components/internalField/Field";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
@@ -43,10 +43,19 @@ export default function Meta() {
     }
   }
 
+  function updateProp(key: string, value: string) {
+    if (currentEditingField) {
+      currentEditingField.props[key].value = value;
+
+      updateField(currentEditingField.key, currentEditingField);
+    }
+  }
+
   return (
     <div>
       <p>Editing {currentEditingField.label}</p>
       <div className="py-4"></div>
+      <h2>Basic</h2>
       <div>
         <Label>Name</Label>
         <Input
@@ -63,6 +72,46 @@ export default function Meta() {
         />
       </div>
       <div className="py-4"></div>
+      <h2>Props</h2>
+      {Object.entries(currentEditingField.props).map(([key, value]) => (
+        <>
+          {key !== "type" && (
+            <div key={key}>
+              <Field
+                label={value.label}
+                value={value.value}
+                type={value.type}
+                options={
+                  currentEditingField.extraProps &&
+                  "options" in currentEditingField.extraProps &&
+                  currentEditingField.extraProps?.options.value
+                }
+                onChange={(e) => updateProp(key, e.target.value)}
+              />
+            </div>
+          )}
+        </>
+      ))}
+      <div className="py-4"></div>
+      {currentEditingField.extraProps && (
+        <>
+          <h2>Extra props</h2>
+          {Object.entries(currentEditingField.extraProps).map(
+            ([key, value]) => (
+              <div key={key}>
+                <Field
+                  label={value.label}
+                  value={value.value}
+                  options={"options" in value ? value.options : undefined}
+                  type={value.type}
+                  onChange={(e) => updateProp(key, e.target.value)}
+                />
+              </div>
+            )
+          )}
+          <div className="py-4"></div>
+        </>
+      )}
       <h2>Rules</h2>
       <div className="py-2"></div>
       <div className="flex flex-col gap-4">
@@ -79,8 +128,9 @@ export default function Meta() {
             {value.enabled && value.type !== "checkbox" && (
               <div className="pt-2 pb-4">
                 <Field
+                  type="text_input"
                   placeholder={value.label}
-                  defaultValue={value.value.toString()}
+                  value={value.value.toString()}
                   onChange={(value) =>
                     updateRuleValue(key as keyof RuleSet, value)
                   }

@@ -77,9 +77,15 @@ export default function Field({
       {field.label && (
         <>
           {isPreview ? (
-            <Label htmlFor={id}>{field.label}</Label>
+            <Label htmlFor={id}>
+              {field.label}
+              {field.rules.required.enabled && "*"}
+            </Label>
           ) : (
-            <FormLabel>{field.label}</FormLabel>
+            <FormLabel>
+              {field.label}
+              {field.rules.required.enabled && "*"}
+            </FormLabel>
           )}
         </>
       )}

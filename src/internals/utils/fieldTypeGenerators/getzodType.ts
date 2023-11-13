@@ -2,7 +2,7 @@ import { SomeFieldExceptColumn } from "@/internals/types/fields";
 import * as z from "zod";
 
 export function getZodType(field: SomeFieldExceptColumn) {
-  let type: z.ZodString | z.ZodNumber;
+  let type: z.ZodString | z.ZodNumber | z.ZodArray<z.ZodString>;
   let code = "";
 
   switch (field.id) {
@@ -19,12 +19,12 @@ export function getZodType(field: SomeFieldExceptColumn) {
       code = "z.string().email()";
       break;
     case "phone_input":
-      type = z.number();
-      code = "z.number()";
-      break;
-    case "checkbox":
       type = z.string();
       code = "z.string()";
+      break;
+    case "checkbox":
+      type = z.array(z.string());
+      code = "z.array(z.string())";
       break;
     case "radio":
       type = z.string();
