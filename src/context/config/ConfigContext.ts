@@ -2,6 +2,7 @@ import {
   SupportedFormRenderers,
   SupportedValidators,
 } from "@/internals/types/fields";
+import { SupportedStylers } from "@/internals/types/supports";
 import { createContext } from "react";
 
 export const ConfigContext = createContext<{
@@ -13,4 +14,5 @@ export type TConfig = {
   mode: "code" | "preview";
   validator: SupportedValidators;
   formRenderer: SupportedFormRenderers;
+  styler: SupportedStylers;
 };

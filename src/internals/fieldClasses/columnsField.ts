@@ -3,13 +3,13 @@ import {
   SomeField,
   SomeFieldExceptColumn,
 } from "../types/fields";
-import { AvailableOptionIds } from "../types/ids";
+import { SupportedOptions } from "../types/supports";
 
 class ColumnField implements IColumnField {
   amount: number;
   columns: string[][];
   key: string;
-  id: AvailableOptionIds = "columns";
+  id: SupportedOptions = "columns";
   // readonly fields: Exclude<SomeField, IColumnField>[]
 
   constructor(amount: number) {

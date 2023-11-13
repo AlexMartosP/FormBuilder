@@ -1,72 +1,74 @@
 "use client";
 
-import { Props } from "@/internals/types/helpers";
-import { AvailableFieldIds } from "@/internals/types/ids";
-import { Label } from "@radix-ui/react-label";
-import { ChangeEventHandler, PropsWithoutRef, useId } from "react";
-import { Input } from "../ui/Input";
-import { FormLabel } from "../ui/Form";
+import { useConfig } from "@/context/config/ConfigProvider";
 import { SomeFieldExceptColumn } from "@/internals/types/fields";
-import { Checkbox } from "../ui/Checkbox";
+import { SupportedFields, SupportedStylers } from "@/internals/types/supports";
+import getProps from "@/internals/utils/getProps";
+import { Label } from "@radix-ui/react-label";
+import { useId } from "react";
+import CheckboxField from "../fieldTemplates/shadcn/CheckboxField";
+import { FormLabel } from "../ui/Form";
+import { Input } from "../ui/Input";
 
 type FieldProps = {
   field: SomeFieldExceptColumn;
   isPreview?: boolean;
-  value?: string;
+  value?: any;
+  onChange: (...args: any[]) => void;
+};
+
+// No duplication
+// Make this typesafe
+const fields: Record<SupportedFields, Record<SupportedStylers, any>> = {
+  text_input: {
+    shadcn: Input,
+  },
+  number_input: {
+    shadcn: Input,
+  },
+  email_input: {
+    shadcn: Input,
+  },
+  phone_input: {
+    shadcn: Input,
+  },
+  checkbox: {
+    shadcn: CheckboxField,
+  },
+  radio: {
+    shadcn: <></>,
+  },
 };
 
 export default function Field({
   field,
   isPreview = false,
   value,
+  onChange,
   ...props
 }: FieldProps) {
   const id = useId();
+  const { config } = useConfig();
 
-  // Handle props
   function renderField() {
-    switch (field.id) {
-      case "text_input":
-        return <Input name={field.name} type="text" value={value} {...props} />;
+    const Component = fields[field.id][config.styler];
+    const fieldProps = getProps(field);
 
-      case "number_input":
-        return (
-          <Input name={field.name} type="number" value={value} {...props} />
-        );
-
-      case "email_input":
-        return (
-          <Input name={field.name} type="email" value={value} {...props} />
-        );
-
-      case "phone_input":
-        return <Input name={field.name} type="tel" value={value} {...props} />;
-      case "checkbox":
-        return (
-          <div>
-            {Array.isArray(field.extraProps?.options.value) && (
-              <>
-                {field.extraProps?.options.value.map((option) => (
-                  <div
-                    className="flex items-center space-x-2"
-                    key={option.value}
-                  >
-                    <Checkbox
-                      id={option.value}
-                      value={option.value}
-                      {...props}
-                    />
-                    <label htmlFor={option.value}>{option.label}</label>
-                  </div>
-                ))}
-              </>
-            )}
-          </div>
-        );
-      case "radio":
-        return <p>Radio</p>;
-      default:
-        <p>Should not render</p>;
+    // Or any other "special" field
+    if (field.id === "checkbox") {
+      return (
+        <Component field={field} value={value} onChange={onChange} {...props} />
+      );
+    } else {
+      return (
+        <Component
+          name={field.name}
+          value={value}
+          onChange={onChange}
+          {...fieldProps}
+          {...props}
+        />
+      );
     }
   }
 
@@ -85,3 +87,56 @@ export default function Field({
     </div>
   );
 }
+
+// function renderField() {
+//   switch (field.id) {
+//     case "text_input":
+//       return <Input name={field.name} type="text" value={value} {...props} />;
+
+//     case "number_input":
+//       return (
+//         <Input name={field.name} type="number" value={value} {...props} />
+//       );
+
+//     case "email_input":
+//       return (
+//         <Input name={field.name} type="email" value={value} {...props} />
+//       );
+
+//     case "phone_input":
+//       return <Input name={field.name} type="tel" value={value} {...props} />;
+//     case "checkbox":
+//       return (
+//         <div>
+//           {Array.isArray(field.extraProps?.options.value) && (
+//             <>
+//               {field.extraProps?.options.value.map((option) => (
+//                 <div className="flex items-center gap-2" key={option.value}>
+//                   <Checkbox
+//                     id={option.value}
+//                     value={option.value}
+//                     checked={value ? value.includes(option.value) : false}
+//                     {...props}
+//                     name={field.name}
+//                     onCheckedChange={(checked) => {
+//                       return checked
+//                         ? props.onChange([...value, option.value])
+//                         : props.onChange(
+//                             value?.filter((v) => v !== option.value)
+//                           );
+//                     }}
+//                   />
+
+//                   <label htmlFor={option.value}>{option.label}</label>
+//                 </div>
+//               ))}
+//             </>
+//           )}
+//         </div>
+//       );
+//     case "radio":
+//       return <p>Radio</p>;
+//     default:
+//       <p>Should not render</p>;
+//   }
+// }

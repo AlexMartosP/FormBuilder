@@ -1,9 +1,9 @@
 import metaFieldsPreset from "../presets/metaFieldsPreset";
 import { rulePresets } from "../presets/rulePresets";
 import { ExtraProps, SomeFieldExceptColumn, Test } from "../types/fields";
-import { AvailableFieldIds } from "../types/ids";
+import { SupportedFields } from "../types/supports";
 
-export function createField<T extends AvailableFieldIds>(id: T): Test[T] {
+export function createField<T extends SupportedFields>(id: T): Test[T] {
   const metaPreset = structuredClone(metaFieldsPreset[id]);
 
   const key = crypto.randomUUID();
@@ -117,7 +117,7 @@ function generateRandomLabel() {
   return fieldLabels[index];
 }
 
-function generateExtraProps(id: AvailableFieldIds): ExtraProps {
+function generateExtraProps(id: SupportedFields): ExtraProps {
   switch (id) {
     case "text_input":
     case "number_input":

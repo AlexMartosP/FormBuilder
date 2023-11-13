@@ -5,7 +5,7 @@ import { useMetaSideBarContext } from "@/context/metaSidebar/MetaSidebarProvider
 import { ItemAsField, ItemAsOption, ItemTypes } from "@/internals/types/DND";
 import { Indexes } from "@/internals/types/engine";
 import { SomeField } from "@/internals/types/fields";
-import { AvailableFieldIds } from "@/internals/types/ids";
+import { SupportedFields } from "@/internals/types/supports";
 import { TOption } from "@/internals/types/options";
 import { ReactNode } from "react";
 import { useDrop } from "react-dnd";
@@ -31,7 +31,7 @@ export default function BottomDropZone({
         const option = item as ItemAsOption;
 
         addField({
-          id: option.id as AvailableFieldIds,
+          id: option.id as SupportedFields,
           toIndexes: indexes,
           position: "bottom",
         });

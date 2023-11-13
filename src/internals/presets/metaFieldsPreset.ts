@@ -5,8 +5,16 @@ import { rulePresets } from "./rulePresets";
 const metaFieldsPreset: PresetObject = {
   text_input: {
     props: {
-      type: "text",
-      placeholder: "",
+      type: {
+        label: "Type",
+        type: "text_input",
+        value: "text",
+      },
+      placeholder: {
+        label: "Placeholder",
+        type: "text_input",
+        value: "",
+      },
     },
     primitive: "string",
     rules: {
@@ -18,8 +26,16 @@ const metaFieldsPreset: PresetObject = {
   },
   number_input: {
     props: {
-      type: "number",
-      placeholder: "",
+      type: {
+        label: "Type",
+        type: "text_input",
+        value: "number",
+      },
+      placeholder: {
+        label: "Placeholder",
+        type: "text_input",
+        value: "",
+      },
     },
     primitive: "number",
     rules: {
@@ -31,8 +47,16 @@ const metaFieldsPreset: PresetObject = {
   },
   email_input: {
     props: {
-      type: "email",
-      placeholder: "",
+      type: {
+        label: "Type",
+        type: "text_input",
+        value: "email",
+      },
+      placeholder: {
+        label: "Placeholder",
+        type: "text_input",
+        value: "",
+      },
     },
     primitive: "string",
     rules: {
@@ -44,8 +68,16 @@ const metaFieldsPreset: PresetObject = {
   },
   phone_input: {
     props: {
-      type: "tel",
-      placeholder: "",
+      type: {
+        label: "Type",
+        type: "text_input",
+        value: "tel",
+      },
+      placeholder: {
+        label: "Placeholder",
+        type: "text_input",
+        value: "",
+      },
     },
     primitive: "string",
     rules: {
@@ -61,7 +93,11 @@ const metaFieldsPreset: PresetObject = {
       required: rulePresets["required"],
     },
     props: {
-      defaultValue: "default",
+      defaultValue: {
+        label: "Default value",
+        type: "text_input",
+        value: "default",
+      },
     },
     primitive: "string",
   },
@@ -71,7 +107,11 @@ const metaFieldsPreset: PresetObject = {
       required: rulePresets["required"],
     },
     props: {
-      defaultValue: "default",
+      defaultValue: {
+        label: "Default value",
+        type: "text_input",
+        value: "default",
+      },
     },
     primitive: "string",
   },

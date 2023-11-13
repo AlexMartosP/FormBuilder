@@ -3,7 +3,7 @@
 import options from "@/internals/constants/options";
 import ColumnField from "@/internals/fieldClasses/columnsField";
 import { IEngine } from "@/internals/types/engine";
-import { AvailableFieldIds } from "@/internals/types/ids";
+import { SupportedFields } from "@/internals/types/supports";
 import { createField } from "@/internals/utils/createField";
 import { getZodType } from "@/internals/utils/fieldTypeGenerators/getzodType";
 import { getDefaultValue } from "@/internals/utils/getDefaultValue";
@@ -27,12 +27,13 @@ const defaultState: IEngine = {
 
 // Dummy
 const dummyFields = [
-  createField(options[0].id as AvailableFieldIds),
-  createField(options[1].id as AvailableFieldIds),
-  createField(options[2].id as AvailableFieldIds),
-  createField(options[3].id as AvailableFieldIds),
-  createField(options[2].id as AvailableFieldIds),
-  createField(options[3].id as AvailableFieldIds),
+  createField(options[0].id as SupportedFields),
+  createField(options[1].id as SupportedFields),
+  createField(options[2].id as SupportedFields),
+  createField(options[3].id as SupportedFields),
+  createField(options[4].id as SupportedFields),
+  createField(options[2].id as SupportedFields),
+  createField(options[3].id as SupportedFields),
 ];
 
 const dummyStructure = [
@@ -40,10 +41,11 @@ const dummyStructure = [
   dummyFields[1].key,
   dummyFields[2].key,
   dummyFields[3].key,
+  dummyFields[4].key,
   new ColumnField(2),
 ];
-(dummyStructure[4] as ColumnField).addField(dummyFields[4].key, 0, 0);
-(dummyStructure[4] as ColumnField).addField(dummyFields[5].key, 1, 0);
+(dummyStructure[5] as ColumnField).addField(dummyFields[3].key, 0, 0);
+(dummyStructure[5] as ColumnField).addField(dummyFields[4].key, 1, 0);
 
 // defaultState.fields = dummyFields;
 defaultState.structure = dummyStructure;
@@ -87,7 +89,10 @@ export default function EngineProvider({ children }: PropsWithChildren) {
     newEngine.structure = newStructure;
 
     newEngine.schema[field.name] = getZodType(field);
-    newEngine.defaultValues[field.name] = getDefaultValue(field);
+
+    const newDefaultValues = { ...newEngine.defaultValues };
+    newDefaultValues[field.name] = getDefaultValue(field);
+    newEngine.defaultValues = newDefaultValues;
 
     setEngine(newEngine);
   };
@@ -245,7 +250,7 @@ export function useEngine() {
 
 //   const field = new InputField({
 //     ...option,
-//     id: option.id as AvailableFieldIds,
+//     id: option.id as SupportedFields,
 //     name,
 //     label,
 //     placeholder: "",
@@ -362,7 +367,7 @@ export function useEngine() {
 
 //   const field = new InputField({
 //     ...option,
-//     id: option.id as AvailableFieldIds,
+//     id: option.id as SupportedFields,
 //     name,
 //     label,
 //     placeholder: "",

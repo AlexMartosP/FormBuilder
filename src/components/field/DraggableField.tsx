@@ -12,10 +12,12 @@ export default function DraggableField({
   engineField,
   value,
   indexes,
+  onChange,
   ...props
 }: {
   engineField: SomeFieldExceptColumn;
   value: any;
+  onChange: (...args: any[]) => void;
   indexes: Indexes[string];
 }) {
   const [{ isDragging }, drag, dragPreview] = useDrag(
@@ -52,7 +54,12 @@ export default function DraggableField({
               opacity: isDragging ? "0.5" : "1",
             }}
           >
-            <Field field={engineField} {...props} />
+            <Field
+              field={engineField}
+              value={value}
+              onChange={onChange}
+              {...props}
+            />
           </div>
         </div>
       </ContextMenuTrigger>

@@ -6,6 +6,7 @@ export default function ConfigProvider({ children }: PropsWithChildren) {
     mode: "preview",
     validator: "zod",
     formRenderer: "react-hook-form",
+    styler: "shadcn",
   });
 
   function updateConfig(newConfig: TConfig) {

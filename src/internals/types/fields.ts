@@ -1,7 +1,5 @@
-import { ZodType } from "zod";
-import { Element, Props } from "./helpers";
-import { AvailableFieldIds, AvailableOptionIds } from "./ids";
-import { Schema } from "./engine";
+import { SupportedFields, SupportedOptions } from "./supports";
+import { AvailableInternalFieldIds } from "./internalFields";
 
 export type Test = {
   text_input: IInputField;
@@ -16,7 +14,7 @@ export type Test = {
 export type Rule = {
   enabled: boolean;
   label: string;
-  type: AvailableFieldIds;
+  type: SupportedFields;
   value: string;
   errorMessage?: string;
 };
@@ -27,13 +25,20 @@ export type RuleSet = {
   maxLength?: Rule;
 };
 
-export type ExtraProp = {
+export type EditableExtraProp = {
   label: string;
-  type: AvailableFieldIds;
+  type: AvailableInternalFieldIds;
   value: string | unknown[];
 };
 
-export type ExtraProps = Record<string, ExtraProp>;
+export type EditableProp = {
+  label: string;
+  type: AvailableInternalFieldIds;
+  value: string;
+};
+
+export type ExtraProps = Record<string, EditableExtraProp>;
+export type Props = Record<string, EditableProp>;
 
 // Should include extra props like options in checkbox
 // Props should be editable with different fields
@@ -47,7 +52,7 @@ export type MetaField = {
 };
 
 type BaseField = {
-  id: AvailableFieldIds;
+  id: SupportedFields;
   label: string;
   key: string;
   name: string;
@@ -58,8 +63,8 @@ type BaseField = {
 
 // Input
 export type InputFieldProps = {
-  type: string;
-  placeholder: string;
+  type: EditableProp;
+  placeholder: EditableProp;
 } & Props;
 export interface IInputField extends BaseField {
   props: InputFieldProps;
@@ -69,34 +74,34 @@ export interface IInputField extends BaseField {
 
 // Select
 export type SelectFieldProps = {
-  defaultValue: string;
+  defaultValue: EditableProp;
 } & Props;
 interface ISelectField extends BaseField {
   props: SelectFieldProps;
   extraProps: {
-    options: ExtraProp;
+    options: EditableProp;
   };
 }
 
 // Radio
 export type RadioFieldProps = {
-  defaultValue: string;
+  defaultValue: EditableProp;
 } & Props;
 interface IRadioField extends BaseField {
   props: RadioFieldProps;
   extraProps: {
-    options: ExtraProp;
+    options: EditableProp;
   };
 }
 
 // Checkbox
 export type CheckboxFieldProps = {
-  defaultValue: string;
+  defaultValue: EditableProp;
 } & Props;
 interface ICheckboxField extends BaseField {
   props: CheckboxFieldProps;
   extraProps: {
-    options: ExtraProp;
+    options: EditableProp;
   };
 }
 
@@ -107,7 +112,7 @@ interface IFileField extends BaseField {
 
 // Column
 export interface IColumnField {
-  id: AvailableOptionIds;
+  id: SupportedOptions;
   key: string;
   amount: number;
   columns: string[][];

@@ -4,7 +4,7 @@ import {
   SomeField,
   SomeFieldExceptColumn,
 } from "@/internals/types/fields";
-import { AvailableFieldIds } from "@/internals/types/ids";
+import { SupportedFields } from "@/internals/types/supports";
 import { TOption } from "@/internals/types/options";
 import { createContext } from "react";
 
@@ -18,7 +18,7 @@ export const EngineContext = createContext<{
 export type Positions = "bottom" | "left" | "right";
 
 export type AddFieldFn = (args: {
-  id: AvailableFieldIds;
+  id: SupportedFields;
   toIndexes: Indexes[string];
   position: Positions;
 }) => void;

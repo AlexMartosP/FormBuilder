@@ -17,7 +17,12 @@ export default function FieldPreview({
         width,
       }}
     >
-      <Field field={engineField} isPreview={true} value={value} />
+      <Field
+        field={engineField}
+        onChange={() => {}}
+        isPreview={true}
+        value={value}
+      />
     </div>
   );
 }
