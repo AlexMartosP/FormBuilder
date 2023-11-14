@@ -1,15 +1,24 @@
 "use client";
 
 import { useConfig } from "@/context/config/ConfigProvider";
-import { SomeFieldExceptColumn } from "@/internals/types/fields";
+import { SpecialComponent } from "@/internals/types/components";
+import {
+  AllFields,
+  SomeFieldExceptColumn,
+  SpecialField,
+} from "@/internals/types/fieldTypes/fields";
+import { Element } from "@/internals/types/helpers";
 import { SupportedFields, SupportedStylers } from "@/internals/types/supports";
 import getProps from "@/internals/utils/getProps";
+import { isSpecialField } from "@/internals/utils/helpers/isSpecialField";
 import { Label } from "@radix-ui/react-label";
 import { useId } from "react";
-import CheckboxField from "../fieldTemplates/shadcn/CheckboxField";
-import { FormLabel } from "../ui/Form";
-import { Input } from "../ui/Input";
+import { FormLabel } from "../../../ui/Form";
+import { Input } from "../../../ui/Input";
+import Shadcn_CheckboxField from "../templates/fields/Shadcn_CheckboxField";
+import Shadcn_RadioField from "../templates/fields/Shadcn_RadioField";
 
+// Value type
 type FieldProps = {
   field: SomeFieldExceptColumn;
   isPreview?: boolean;
@@ -17,9 +26,15 @@ type FieldProps = {
   onChange: (...args: any[]) => void;
 };
 
-// No duplication
-// Make this typesafe
-const fields: Record<SupportedFields, Record<SupportedStylers, any>> = {
+type FieldsWComponents = {
+  [fieldKey in SupportedFields]: {
+    [styleKey in SupportedStylers]: AllFields[fieldKey] extends SpecialField
+      ? SpecialComponent
+      : Element;
+  };
+};
+
+const fields: FieldsWComponents = {
   text_input: {
     shadcn: Input,
   },
@@ -33,10 +48,10 @@ const fields: Record<SupportedFields, Record<SupportedStylers, any>> = {
     shadcn: Input,
   },
   checkbox: {
-    shadcn: CheckboxField,
+    shadcn: Shadcn_CheckboxField,
   },
   radio: {
-    shadcn: <></>,
+    shadcn: Shadcn_RadioField,
   },
 };
 
@@ -51,15 +66,17 @@ export default function Field({
   const { config } = useConfig();
 
   function renderField() {
-    const Component = fields[field.id][config.styler];
     const fieldProps = getProps(field);
 
-    // Or any other "special" field
-    if (field.id === "checkbox") {
+    if (isSpecialField(field)) {
+      const Component = fields[field.id][config.styler];
+
       return (
         <Component field={field} value={value} onChange={onChange} {...props} />
       );
     } else {
+      const Component = fields[field.id][config.styler];
+
       return (
         <Component
           name={field.name}

@@ -2,9 +2,9 @@
 
 import Columns from "@/components/Columns";
 import EmptyColumn from "@/components/EmptyColumn";
-import BottomDropZone from "@/components/dropzones/BottomDropZone";
-import SidesDropZone from "@/components/dropzones/SidesDropZone";
-import DraggableField from "@/components/field/DraggableField";
+import BottomDropZone from "@/components/formBuilder/preview/dropzones/BottomDropZone";
+import SidesDropZone from "@/components/formBuilder/preview/dropzones/SidesDropZone";
+import DraggableField from "@/components/formBuilder/preview/field/DraggableField";
 import { Form, FormField, FormItem, FormMessage } from "@/components/ui/Form";
 import { useEngine } from "@/context/engine/EngineProvider";
 import ColumnField from "@/internals/fieldClasses/columnsField";
@@ -16,7 +16,6 @@ import * as z from "zod";
 
 export default function ShadcnReactHookForm() {
   const { engine } = useEngine();
-  // Get selected validator and styler
 
   const formSchema = z.object({
     ...(getSchemaTypes(engine.schema) as z.ZodRawShape),

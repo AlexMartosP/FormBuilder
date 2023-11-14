@@ -1,4 +1,3 @@
-import { Input } from "@/components/ui/Input";
 import { PresetObject } from "../types/helpers";
 import { rulePresets } from "./rulePresets";
 
@@ -12,6 +11,11 @@ const metaFieldsPreset: PresetObject = {
       },
       placeholder: {
         label: "Placeholder",
+        type: "text_input",
+        value: "",
+      },
+      defaultValue: {
+        label: "Default value",
         type: "text_input",
         value: "",
       },
@@ -35,6 +39,11 @@ const metaFieldsPreset: PresetObject = {
         type: "text_input",
         value: "",
       },
+      defaultValue: {
+        label: "Default value",
+        type: "number_input",
+        value: "0",
+      },
     },
     primitive: "number",
     rules: {
@@ -55,6 +64,11 @@ const metaFieldsPreset: PresetObject = {
         type: "text_input",
         value: "",
       },
+      defaultValue: {
+        label: "Default value",
+        type: "text_input",
+        value: "",
+      },
     },
     primitive: "string",
     rules: {
@@ -72,6 +86,11 @@ const metaFieldsPreset: PresetObject = {
       },
       placeholder: {
         label: "Placeholder",
+        type: "text_input",
+        value: "",
+      },
+      defaultValue: {
+        label: "Default value",
         type: "text_input",
         value: "",
       },

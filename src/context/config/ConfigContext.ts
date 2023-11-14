@@ -1,8 +1,8 @@
 import {
   SupportedFormRenderers,
+  SupportedStylers,
   SupportedValidators,
-} from "@/internals/types/fields";
-import { SupportedStylers } from "@/internals/types/supports";
+} from "@/internals/types/supports";
 import { createContext } from "react";
 
 export const ConfigContext = createContext<{

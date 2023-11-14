@@ -1,4 +1,4 @@
-import { RuleSet } from "../types/fields";
+import { RuleSet } from "../types/fieldTypes/rules";
 
 export const rulePresets: RuleSet = {
   required: {

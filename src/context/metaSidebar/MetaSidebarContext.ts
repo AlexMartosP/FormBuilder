@@ -1,4 +1,4 @@
-import { SomeField, SomeFieldExceptColumn } from "@/internals/types/fields";
+import { SomeFieldExceptColumn } from "@/internals/types/fieldTypes/fields";
 import { createContext } from "react";
 
 export const MetaSideBarContext = createContext<TMetaSideBarContext | null>(

@@ -1,16 +1,16 @@
-import metaFieldsPreset from "../presets/metaFieldsPreset";
-import { rulePresets } from "../presets/rulePresets";
-import { ExtraProps, SomeFieldExceptColumn, Test } from "../types/fields";
+import metaFieldsPreset from "../presets/fieldMetaPresets";
+import { AllFields, FieldOptions } from "../types/fieldTypes/fields";
 import { SupportedFields } from "../types/supports";
+import { isSpecial } from "./helpers/isSpecialField";
 
-export function createField<T extends SupportedFields>(id: T): Test[T] {
+export function createField<T extends SupportedFields>(id: T): AllFields[T] {
   const metaPreset = structuredClone(metaFieldsPreset[id]);
 
   const key = crypto.randomUUID();
   const name = generateRandomName();
   const label = generateRandomLabel();
 
-  const extraProps = generateExtraProps(id);
+  const options = isSpecial(id) && generateOptions(id);
 
   return {
     ...metaPreset,
@@ -18,7 +18,7 @@ export function createField<T extends SupportedFields>(id: T): Test[T] {
     key,
     name,
     label,
-    extraProps,
+    ...(options ? { options } : {}),
   };
 }
 
@@ -117,37 +117,24 @@ function generateRandomLabel() {
   return fieldLabels[index];
 }
 
-function generateExtraProps(id: SupportedFields): ExtraProps | null {
-  switch (id) {
-    case "text_input":
-    case "number_input":
-    case "email_input":
-    case "phone_input":
-      return null;
-    case "checkbox":
-    case "radio":
-      const options = [];
+function generateOptions(id: SupportedFields): FieldOptions[] {
+  const options: FieldOptions[] = [];
 
-      options.push({
-        value: "default",
-        label: "Default",
-      });
+  options.push({
+    value: "default",
+    label: "Default",
+    id: crypto.randomUUID(),
+  });
 
-      for (let i = 0; i < 3; i++) {
-        const label = generateRandomLabel();
+  for (let i = 0; i < 3; i++) {
+    const label = generateRandomLabel();
 
-        options.push({
-          value: label.toLowerCase().replace(" ", "-"),
-          label,
-        });
-      }
-
-      return {
-        options: {
-          label: "Options",
-          type: "multi",
-          value: options,
-        },
-      };
+    options.push({
+      value: label.toLowerCase().replace(" ", "-"),
+      label,
+      id: crypto.randomUUID(),
+    });
   }
+
+  return options;
 }

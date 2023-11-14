@@ -1,4 +1,4 @@
-import { SomeFieldExceptColumn } from "@/internals/types/fields";
+import { SomeFieldExceptColumn } from "@/internals/types/fieldTypes/fields";
 import * as z from "zod";
 
 export function getZodType(field: SomeFieldExceptColumn) {
@@ -31,7 +31,7 @@ export function getZodType(field: SomeFieldExceptColumn) {
       code = "z.string()";
       break;
     default:
-      throw new Error("Type not valid for: " + field.id);
+      throw new Error("Type not valid for");
   }
 
   if (field.rules.required?.enabled) {

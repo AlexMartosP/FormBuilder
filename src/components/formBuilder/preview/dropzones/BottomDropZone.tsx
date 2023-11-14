@@ -4,9 +4,7 @@ import { useEngine } from "@/context/engine/EngineProvider";
 import { useMetaSideBarContext } from "@/context/metaSidebar/MetaSidebarProvider";
 import { ItemAsField, ItemAsOption, ItemTypes } from "@/internals/types/DND";
 import { Indexes } from "@/internals/types/engine";
-import { SomeField } from "@/internals/types/fields";
 import { SupportedFields } from "@/internals/types/supports";
-import { TOption } from "@/internals/types/options";
 import { ReactNode } from "react";
 import { useDrop } from "react-dnd";
 

@@ -1,21 +1,18 @@
 import { AvailableInternalFieldIds } from "@/internals/types/internalFields";
-import { Input } from "../ui/Input";
-import { Label } from "../ui/Label";
 import { ChangeEventHandler } from "react";
+import { Input } from "../../../ui/Input";
+import { Label } from "../../../ui/Label";
 import SelectField from "./SelectField";
-import MultiField from "./MultiField";
 
 // No duplication
-// Make this typesafe
 const fields: Record<AvailableInternalFieldIds, any> = {
   text_input: ({ ...args }) => <Input type="text" {...args} />,
   number_input: ({ ...args }) => <Input type="number" {...args} />,
   checkbox: <></>,
   select: SelectField,
-  multi: MultiField,
 };
 
-export default function Field({
+export default function Field<Type extends AvailableInternalFieldIds>({
   label,
   placeholder,
   type,
@@ -25,14 +22,12 @@ export default function Field({
 }: {
   label?: string;
   placeholder?: string;
-  type: AvailableInternalFieldIds;
+  type: Type;
   value: any;
   options?: { value: string; label: string }[];
   onChange: ChangeEventHandler<HTMLInputElement>;
 }) {
   const Component = fields[type];
-
-  console.log(options);
 
   return (
     <>

@@ -1,10 +1,12 @@
-import Field from "@/components/internalField/Field";
+import Field from "@/components/formBuilder/internal/internalField/Field";
+import OptionsField from "@/components/formBuilder/internal/internalField/OptionsField";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import { useEngine } from "@/context/engine/EngineProvider";
 import { useMetaSideBarContext } from "@/context/metaSidebar/MetaSidebarProvider";
-import { RuleSet } from "@/internals/types/fields";
+import { RuleSet } from "@/internals/types/fieldTypes/rules";
+import { isSpecialField } from "@/internals/utils/helpers/isSpecialField";
 
 export default function Meta() {
   const { currentEditingField } = useMetaSideBarContext();
@@ -51,6 +53,36 @@ export default function Meta() {
     }
   }
 
+  function updateOptions(optionId: string, value: string, label: string) {
+    if (currentEditingField && isSpecialField(currentEditingField)) {
+      currentEditingField.options = currentEditingField.options.map(
+        (option) => {
+          if (option.id === optionId) {
+            return {
+              id: optionId,
+              value,
+              label,
+            };
+          }
+
+          return option;
+        }
+      );
+
+      updateField(currentEditingField.key, currentEditingField);
+    }
+  }
+
+  function deleteOption(optionId: string) {
+    if (currentEditingField && isSpecialField(currentEditingField)) {
+      currentEditingField.options = currentEditingField.options.filter(
+        (option) => option.id !== optionId
+      );
+
+      updateField(currentEditingField.key, currentEditingField);
+    }
+  }
+
   return (
     <div>
       <p>Editing {currentEditingField.label}</p>
@@ -82,9 +114,9 @@ export default function Meta() {
                 value={value.value}
                 type={value.type}
                 options={
-                  currentEditingField.extraProps &&
-                  "options" in currentEditingField.extraProps &&
-                  currentEditingField.extraProps?.options.value
+                  isSpecialField(currentEditingField)
+                    ? currentEditingField.options
+                    : undefined
                 }
                 onChange={(e) => updateProp(key, e.target.value)}
               />
@@ -93,22 +125,16 @@ export default function Meta() {
         </>
       ))}
       <div className="py-4"></div>
-      {currentEditingField.extraProps && (
+      {isSpecialField(currentEditingField) && (
         <>
-          <h2>Extra props</h2>
-          {Object.entries(currentEditingField.extraProps).map(
-            ([key, value]) => (
-              <div key={key}>
-                <Field
-                  label={value.label}
-                  value={value.value}
-                  options={"options" in value ? value.options : undefined}
-                  type={value.type}
-                  onChange={(e) => updateProp(key, e.target.value)}
-                />
-              </div>
-            )
-          )}
+          <h2>Options</h2>
+          <OptionsField
+            options={currentEditingField.options}
+            onChange={(changedId, value, label) =>
+              updateOptions(changedId, value, label)
+            }
+            onDelete={deleteOption}
+          />
           <div className="py-4"></div>
         </>
       )}
@@ -131,8 +157,8 @@ export default function Meta() {
                   type="text_input"
                   placeholder={value.label}
                   value={value.value.toString()}
-                  onChange={(value) =>
-                    updateRuleValue(key as keyof RuleSet, value)
+                  onChange={(e) =>
+                    updateRuleValue(key as keyof RuleSet, e.target.value)
                   }
                 />
               </div>

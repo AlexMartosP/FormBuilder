@@ -2,15 +2,13 @@
 
 import { ItemTypes } from "@/internals/types/DND";
 import { useDragLayer } from "react-dnd";
-import OptionDragPreview from "./option/OptionDragPreview";
-import InputFieldPreview from "./inputField/InputFieldDragPreview";
-import FieldPreview from "./field/FieldPreview";
+import FieldPreview from "./formBuilder/preview/field/FieldPreview";
+import OptionDragPreview from "./formBuilder/preview/option/OptionDragPreview";
 
 export default function CustomDragLayer() {
-  const { item, type, isDragging, currentOffset } = useDragLayer((monitor) => ({
+  const { item, type, currentOffset } = useDragLayer((monitor) => ({
     item: monitor.getItem(),
     type: monitor.getItemType(),
-    isDragging: monitor.isDragging(),
     currentOffset: monitor.getSourceClientOffset(),
   }));
 

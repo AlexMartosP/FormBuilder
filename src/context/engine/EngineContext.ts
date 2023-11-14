@@ -1,11 +1,9 @@
 import { IEngine, Indexes } from "@/internals/types/engine";
 import {
   IInputField,
-  SomeField,
   SomeFieldExceptColumn,
-} from "@/internals/types/fields";
+} from "@/internals/types/fieldTypes/fields";
 import { SupportedFields } from "@/internals/types/supports";
-import { TOption } from "@/internals/types/options";
 import { createContext } from "react";
 
 export const EngineContext = createContext<{
@@ -23,11 +21,6 @@ export type AddFieldFn = (args: {
   position: Positions;
 }) => void;
 
-export type AddColumnFn = (args: {
-  amount: number;
-  targetIndexes: Indexes[string];
-}) => void;
-
 export type MoveFieldFn = ({
   sourceFieldKey,
   sourceIndexes,
@@ -39,11 +32,6 @@ export type MoveFieldFn = ({
   targetIndexes: Indexes[string];
   position: Positions;
 }) => void;
-
-export type GetFieldByKeys = (
-  fieldKey: string,
-  columnKey?: string
-) => SomeFieldExceptColumn;
 
 export type RemoveFieldFn = (field: IInputField) => void;
 

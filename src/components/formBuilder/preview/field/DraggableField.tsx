@@ -1,12 +1,12 @@
 import { ItemTypes } from "@/internals/types/DND";
 import { Indexes } from "@/internals/types/engine";
-import { SomeFieldExceptColumn } from "@/internals/types/fields";
 import { useEffect, useRef } from "react";
 import { useDrag } from "react-dnd";
 import { getEmptyImage } from "react-dnd-html5-backend";
 import Field from "./Field";
-import FieldContextMenu from "../FieldContextMenu";
-import { ContextMenu, ContextMenuTrigger } from "../ui/ContextMenu";
+import FieldContextMenu from "../../../FieldContextMenu";
+import { ContextMenu, ContextMenuTrigger } from "../../../ui/ContextMenu";
+import { SomeFieldExceptColumn } from "@/internals/types/fieldTypes/fields";
 
 export default function DraggableField({
   engineField,

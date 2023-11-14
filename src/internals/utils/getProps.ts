@@ -1,4 +1,4 @@
-import { SomeFieldExceptColumn } from "../types/fields";
+import { SomeFieldExceptColumn } from "../types/fieldTypes/fields";
 
 export default function getProps(
   field: SomeFieldExceptColumn

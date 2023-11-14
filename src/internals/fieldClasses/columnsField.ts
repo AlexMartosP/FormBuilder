@@ -1,8 +1,4 @@
-import {
-  IColumnField,
-  SomeField,
-  SomeFieldExceptColumn,
-} from "../types/fields";
+import { IColumnField } from "../types/fieldTypes/fields";
 import { SupportedOptions } from "../types/supports";
 
 class ColumnField implements IColumnField {

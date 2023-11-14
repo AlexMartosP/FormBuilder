@@ -1,6 +1,5 @@
-import { ZodType } from "zod";
-import { IColumnField, SomeField, SomeFieldExceptColumn } from "./fields";
 import ColumnField from "../fieldClasses/columnsField";
+import { SomeFieldExceptColumn } from "./fieldTypes/fields";
 
 export type Schema = Record<
   string,

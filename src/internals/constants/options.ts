@@ -1,7 +1,7 @@
 import {
   Binary,
+  CheckCircle2,
   CheckSquare,
-  Columns,
   Mail,
   PenBox,
   Phone,
@@ -34,11 +34,11 @@ const options: TOption[] = [
     icon: CheckSquare,
     id: "checkbox",
   },
-  // {
-  //   label: "Columns",
-  //   icon: Columns,
-  //   id: "columns",
-  // },
+  {
+    label: "Radio",
+    icon: CheckCircle2,
+    id: "radio",
+  },
 ];
 
 export default options;

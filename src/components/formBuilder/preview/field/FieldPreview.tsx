@@ -1,4 +1,4 @@
-import { IInputField } from "@/internals/types/fields";
+import { SomeFieldExceptColumn } from "@/internals/types/fieldTypes/fields";
 import Field from "./Field";
 
 export default function FieldPreview({
@@ -6,7 +6,7 @@ export default function FieldPreview({
   value,
   width,
 }: {
-  engineField: IInputField;
+  engineField: SomeFieldExceptColumn;
   value: any;
   width: number;
 }) {

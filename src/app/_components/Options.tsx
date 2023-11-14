@@ -1,6 +1,6 @@
 "use client";
 
-import DraggableOption from "@/components/option/DraggableOption";
+import DraggableOption from "@/components/formBuilder/preview/option/DraggableOption";
 import options from "@/internals/constants/options";
 
 export default function Options() {
