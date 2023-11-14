@@ -132,18 +132,21 @@ export default function EngineProvider({ children }: PropsWithChildren) {
     setEngine(newEngine);
   };
 
-  const updateField: UpdateFieldFn = (fieldKey, updatedField) => {
+  const updateField: UpdateFieldFn = (fieldKey, updatedField, defaultValue) => {
     const newEngine = { ...engine };
 
     const currentField = newEngine.fields[fieldKey];
-
-    newEngine.fields[fieldKey] = updatedField;
+    const currentDefaultValue = newEngine.defaultValues[currentField.name];
 
     delete newEngine.schema[currentField.name];
     delete newEngine.defaultValues[currentField.name];
 
+    newEngine.fields[fieldKey] = updatedField;
+
     newEngine.schema[updatedField.name] = getZodType(updatedField);
-    newEngine.defaultValues[updatedField.name] = getDefaultValue(updatedField);
+    newEngine.defaultValues[updatedField.name] =
+      defaultValue ?? currentDefaultValue;
+
     setEngine(newEngine);
   };
 

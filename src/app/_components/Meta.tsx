@@ -1,5 +1,6 @@
 import Field from "@/components/formBuilder/internal/internalField/Field";
 import OptionsField from "@/components/formBuilder/internal/internalField/OptionsField";
+import SelectField from "@/components/formBuilder/internal/internalField/SelectField";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
@@ -10,126 +11,142 @@ import { isSpecialField } from "@/internals/utils/helpers/isSpecialField";
 
 export default function Meta() {
   const { currentEditingField } = useMetaSideBarContext();
-  const { updateField } = useEngine();
+  const { updateField, engine } = useEngine();
 
   if (!currentEditingField) {
     return null;
   }
 
-  function updateMeta(key: "name" | "label", value: string) {
-    if (currentEditingField) {
-      currentEditingField[key] = value;
+  const field = engine.fields[currentEditingField];
+  const defaultValue = engine.defaultValues[field.name];
 
-      updateField(currentEditingField.key, currentEditingField);
+  function updateMeta(key: "name" | "label", value: string) {
+    if (field) {
+      field[key] = value;
+
+      updateField(field.key, field);
+    }
+  }
+
+  function updateDefaultValue(value: unknown) {
+    if (currentEditingField) {
+      updateField(field.key, field, value);
     }
   }
 
   function enableRule(rule: keyof RuleSet) {
-    if (currentEditingField) {
-      if (currentEditingField.rules[rule]) {
-        currentEditingField.rules[rule]!.enabled =
-          !currentEditingField.rules[rule]!.enabled;
+    if (field) {
+      if (field.rules[rule]) {
+        field.rules[rule]!.enabled = !field.rules[rule]!.enabled;
 
-        updateField(currentEditingField.key, currentEditingField);
+        updateField(field.key, field);
       }
     }
   }
 
   function updateRuleValue(rule: keyof RuleSet, value: string) {
-    if (currentEditingField) {
-      if (currentEditingField.rules[rule]) {
-        currentEditingField.rules[rule]!.value = value;
+    if (field) {
+      if (field.rules[rule]) {
+        field.rules[rule]!.value = value;
 
-        updateField(currentEditingField.key, currentEditingField);
+        updateField(field.key, field);
       }
     }
   }
 
   function updateProp(key: string, value: string) {
-    if (currentEditingField) {
-      currentEditingField.props[key].value = value;
+    if (field) {
+      field.props[key].value = value;
 
-      updateField(currentEditingField.key, currentEditingField);
+      updateField(field.key, field);
     }
   }
 
   function updateOptions(optionId: string, value: string, label: string) {
-    if (currentEditingField && isSpecialField(currentEditingField)) {
-      currentEditingField.options = currentEditingField.options.map(
-        (option) => {
-          if (option.id === optionId) {
-            return {
-              id: optionId,
-              value,
-              label,
-            };
-          }
-
-          return option;
+    if (field && isSpecialField(field)) {
+      field.options = field.options.map((option) => {
+        if (option.id === optionId) {
+          return {
+            id: optionId,
+            value,
+            label,
+          };
         }
-      );
 
-      updateField(currentEditingField.key, currentEditingField);
+        return option;
+      });
+
+      updateField(field.key, field);
     }
   }
 
   function deleteOption(optionId: string) {
-    if (currentEditingField && isSpecialField(currentEditingField)) {
-      currentEditingField.options = currentEditingField.options.filter(
-        (option) => option.id !== optionId
-      );
+    if (field && isSpecialField(field)) {
+      field.options = field.options.filter((option) => option.id !== optionId);
 
-      updateField(currentEditingField.key, currentEditingField);
+      updateField(field.key, field);
     }
   }
 
   return (
     <div>
-      <p>Editing {currentEditingField.label}</p>
+      <p>Editing {field.label}</p>
       <div className="py-4"></div>
       <h2>Basic</h2>
       <div>
         <Label>Name</Label>
         <Input
           onChange={(e) => updateMeta("name", e.target.value)}
-          value={currentEditingField.name}
+          value={field.name}
         />
+      </div>
+      <div className="py-2"></div>
+      <div>
+        <Label>Default value</Label>
+        {field.id === "radio" ? (
+          <SelectField
+            options={field.options}
+            placeholder={defaultValue as string}
+            onChange={() => {}}
+          />
+        ) : (
+          <Input
+            onChange={(e) => updateDefaultValue(e.target.value)}
+            value={defaultValue as string}
+          />
+        )}
       </div>
       <div className="py-2"></div>
       <div>
         <Label>Label</Label>
         <Input
           onChange={(e) => updateMeta("label", e.target.value)}
-          value={currentEditingField.label}
+          value={field.label}
         />
       </div>
       <div className="py-4"></div>
       <h2>Props</h2>
-      {Object.entries(currentEditingField.props).map(([key, value]) => (
-        <>
+      {Object.entries(field.props).map(([key, value]) => (
+        <div key={key}>
           {key !== "type" && (
-            <div key={key}>
+            <div>
               <Field
                 label={value.label}
                 value={value.value}
                 type={value.type}
-                options={
-                  isSpecialField(currentEditingField)
-                    ? currentEditingField.options
-                    : undefined
-                }
+                options={isSpecialField(field) ? field.options : undefined}
                 onChange={(e) => updateProp(key, e.target.value)}
               />
             </div>
           )}
-        </>
+        </div>
       ))}
       <div className="py-4"></div>
-      {isSpecialField(currentEditingField) && (
+      {isSpecialField(field) && (
         <>
           <h2>Options</h2>
           <OptionsField
-            options={currentEditingField.options}
+            options={field.options}
             onChange={(changedId, value, label) =>
               updateOptions(changedId, value, label)
             }
@@ -141,7 +158,7 @@ export default function Meta() {
       <h2>Rules</h2>
       <div className="py-2"></div>
       <div className="flex flex-col gap-4">
-        {Object.entries(currentEditingField.rules).map(([key, value]) => (
+        {Object.entries(field.rules).map(([key, value]) => (
           <div key={key}>
             <div className="flex gap-2">
               <Checkbox

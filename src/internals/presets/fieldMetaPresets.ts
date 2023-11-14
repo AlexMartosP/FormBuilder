@@ -14,11 +14,6 @@ const metaFieldsPreset: PresetObject = {
         type: "text_input",
         value: "",
       },
-      defaultValue: {
-        label: "Default value",
-        type: "text_input",
-        value: "",
-      },
     },
     primitive: "string",
     rules: {
@@ -39,11 +34,6 @@ const metaFieldsPreset: PresetObject = {
         type: "text_input",
         value: "",
       },
-      defaultValue: {
-        label: "Default value",
-        type: "number_input",
-        value: "0",
-      },
     },
     primitive: "number",
     rules: {
@@ -61,11 +51,6 @@ const metaFieldsPreset: PresetObject = {
       },
       placeholder: {
         label: "Placeholder",
-        type: "text_input",
-        value: "",
-      },
-      defaultValue: {
-        label: "Default value",
         type: "text_input",
         value: "",
       },
@@ -89,11 +74,6 @@ const metaFieldsPreset: PresetObject = {
         type: "text_input",
         value: "",
       },
-      defaultValue: {
-        label: "Default value",
-        type: "text_input",
-        value: "",
-      },
     },
     primitive: "string",
     rules: {
@@ -106,26 +86,14 @@ const metaFieldsPreset: PresetObject = {
     rules: {
       required: rulePresets["required"],
     },
-    props: {
-      defaultValue: {
-        label: "Default value",
-        type: "select",
-        value: "default",
-      },
-    },
+    props: {},
     primitive: "string",
   },
   radio: {
     rules: {
       required: rulePresets["required"],
     },
-    props: {
-      defaultValue: {
-        label: "Default value",
-        type: "text_input",
-        value: "default",
-      },
-    },
+    props: {},
     primitive: "string",
   },
 };

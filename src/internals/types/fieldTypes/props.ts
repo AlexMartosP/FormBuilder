@@ -1,9 +1,9 @@
 import { AvailableInternalFieldIds } from "../internalFields";
 
-export type EditableProp = {
+export type EditableProp<Value extends string | string[] = string> = {
   label: string;
   type: AvailableInternalFieldIds;
-  value: string;
+  value: Value;
 };
 
 export type Props = Record<string, EditableProp>;

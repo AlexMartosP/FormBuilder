@@ -19,7 +19,6 @@ export type AllFields = {
 // Field
 export type FieldMeta = {
   rules: RuleSet;
-  props: Props;
   primitive: Primitivies;
 };
 
@@ -48,17 +47,12 @@ export type BaseField_Special = {
 export type InputFieldProps = {
   type: EditableProp;
   placeholder: EditableProp;
-  defaultValue: EditableProp;
 };
 export interface IInputField extends BaseField_Regular {
   props: InputFieldProps;
 }
 
-export interface SpecialField extends BaseField_Special {
-  props: {
-    defaultValue: EditableProp;
-  } & Props;
-}
+export type SpecialField = BaseField_Special;
 
 // Column
 export interface IColumnField {

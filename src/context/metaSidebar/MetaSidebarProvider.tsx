@@ -6,16 +6,18 @@ import { MetaSideBarContext, TMetaSideBarContext } from "./MetaSidebarContext";
 import { SomeFieldExceptColumn } from "@/internals/types/fieldTypes/fields";
 
 export default function MetaSidebarProvider({ children }: PropsWithChildren) {
-  const [currentEditingField, setCurrentEditingField] =
-    useState<SomeFieldExceptColumn | null>(null);
+  const [currentEditingField, setCurrentEditingField] = useState<
+    TMetaSideBarContext["currentEditingField"] | null
+  >(null);
 
   const { engine } = useEngine();
 
   const updateCurrentEditingField: TMetaSideBarContext["updateCurrentEditingField"] =
     (fieldKey) => {
       const field = engine.fields[fieldKey];
+      const defaultValue = engine.defaultValues[field.name];
 
-      setCurrentEditingField(field);
+      setCurrentEditingField(fieldKey);
     };
 
   return (

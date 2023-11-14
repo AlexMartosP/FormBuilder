@@ -11,7 +11,7 @@ export function getDefaultValue(field: SomeFieldExceptColumn): unknown {
     case "checkbox":
       return ["default"];
     case "radio":
-      return "";
+      return "default";
     default:
       throw new Error("Type not valid");
   }

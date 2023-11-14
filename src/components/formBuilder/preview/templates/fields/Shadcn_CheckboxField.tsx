@@ -11,7 +11,7 @@ export default function Shadcn_CheckboxField({
     <div>
       <>
         {field.options.map((option) => (
-          <div className="flex items-center gap-2" key={option.value}>
+          <div className="flex items-center gap-2" key={option.id}>
             <Checkbox
               id={option.value}
               value={option.value}

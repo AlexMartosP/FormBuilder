@@ -37,5 +37,6 @@ export type RemoveFieldFn = (field: IInputField) => void;
 
 export type UpdateFieldFn = (
   fieldKey: string,
-  updatedField: SomeFieldExceptColumn
+  updatedField: SomeFieldExceptColumn,
+  defaultValue?: unknown
 ) => void;

@@ -8,20 +8,18 @@ import {
 } from "../../../ui/Select";
 
 export default function SelectField({
-  value,
   options,
   onChange,
   placeholder,
 }: {
   placeholder?: string;
-  value: any;
   options: { value: string; label: string }[];
   onChange: ChangeEventHandler<HTMLInputElement>;
 }) {
   return (
-    <Select>
+    <Select defaultValue={placeholder}>
       <SelectTrigger>
-        <SelectValue placeholder={placeholder} />
+        <SelectValue />
       </SelectTrigger>
       <SelectContent>
         {options.map((option) => (
