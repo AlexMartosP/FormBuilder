@@ -20,6 +20,7 @@ export type AllFields = {
 export type FieldMeta = {
   rules: RuleSet;
   primitive: Primitivies;
+  props: Props;
 };
 
 type CommonBase = {

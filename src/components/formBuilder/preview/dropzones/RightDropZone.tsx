@@ -1,6 +1,7 @@
 import { useEngine } from "@/context/engine/EngineProvider";
 import { ItemAsField, ItemAsOption, ItemTypes } from "@/internals/types/DND";
 import { Indexes } from "@/internals/types/engine";
+import { SupportedFields } from "@/internals/types/supports";
 import { ReactNode } from "react";
 import { useDrop } from "react-dnd";
 
@@ -21,17 +22,11 @@ export default function RightDropZone({
       if (itemType === ItemTypes.Option) {
         const option = item as ItemAsOption;
 
-        switch (option.id) {
-          case "text_input":
-          case "number_input":
-          case "email_input":
-          case "phone_input":
-            addField({
-              id: option.id,
-              toIndexes: indexes,
-              position: "right",
-            });
-        }
+        addField({
+          id: option.id as SupportedFields,
+          toIndexes: indexes,
+          position: "right",
+        });
       } else {
         const field = item as ItemAsField;
 

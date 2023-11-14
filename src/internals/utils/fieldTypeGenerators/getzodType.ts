@@ -1,38 +1,11 @@
+import fields from "@/internals/constants/fields";
 import { SomeFieldExceptColumn } from "@/internals/types/fieldTypes/fields";
 import * as z from "zod";
 
 export function getZodType(field: SomeFieldExceptColumn) {
-  let type: z.ZodString | z.ZodNumber | z.ZodArray<z.ZodString>;
-  let code = "";
-
-  switch (field.id) {
-    case "text_input":
-      type = z.string();
-      code = "z.string()";
-      break;
-    case "number_input":
-      type = z.coerce.number();
-      code = "z.coerce.string()";
-      break;
-    case "email_input":
-      type = z.string().email();
-      code = "z.string().email()";
-      break;
-    case "phone_input":
-      type = z.string();
-      code = "z.string()";
-      break;
-    case "checkbox":
-      type = z.array(z.string());
-      code = "z.array(z.string())";
-      break;
-    case "radio":
-      type = z.string();
-      code = "z.string()";
-      break;
-    default:
-      throw new Error("Type not valid for");
-  }
+  let type: z.ZodString | z.ZodNumber | z.ZodArray<z.ZodString> =
+    fields[field.id].validators.zod.type;
+  let code = fields[field.id].validators.zod.code;
 
   if (field.rules.required?.enabled) {
     type = type.min(1, {

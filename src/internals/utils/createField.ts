@@ -1,3 +1,4 @@
+import fields from "../constants/fields";
 import metaFieldsPreset from "../presets/fieldMetaPresets";
 import { AllFields, FieldOptions } from "../types/fieldTypes/fields";
 import { SupportedFields } from "../types/supports";

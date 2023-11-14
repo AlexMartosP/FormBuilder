@@ -6,7 +6,10 @@ import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import { useEngine } from "@/context/engine/EngineProvider";
 import { useMetaSideBarContext } from "@/context/metaSidebar/MetaSidebarProvider";
+import fields from "@/internals/constants/fields";
 import { RuleSet } from "@/internals/types/fieldTypes/rules";
+import fieldHasOptions from "@/internals/utils/helpers/fieldHasOptions";
+import fieldIsMultiple from "@/internals/utils/helpers/fieldIsMultiple";
 import { isSpecialField } from "@/internals/utils/helpers/isSpecialField";
 
 export default function Meta() {
@@ -103,7 +106,7 @@ export default function Meta() {
       <div className="py-2"></div>
       <div>
         <Label>Default value</Label>
-        {field.id === "radio" ? (
+        {fieldHasOptions(field) && !fields[field.id].multiple ? (
           <SelectField
             options={field.options}
             placeholder={defaultValue as string}

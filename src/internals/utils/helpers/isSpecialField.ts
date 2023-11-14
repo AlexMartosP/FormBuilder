@@ -1,3 +1,4 @@
+import fields from "@/internals/constants/fields";
 import {
   SomeFieldExceptColumn,
   SpecialField,
@@ -5,16 +6,7 @@ import {
 import { SupportedFields } from "../../types/supports";
 
 export function isSpecial(id: SupportedFields) {
-  switch (id) {
-    case "text_input":
-    case "number_input":
-    case "email_input":
-    case "phone_input":
-      return false;
-    case "checkbox":
-    case "radio":
-      return true;
-  }
+  return fields[id].hasOptions;
 }
 
 export function isSpecialField(
